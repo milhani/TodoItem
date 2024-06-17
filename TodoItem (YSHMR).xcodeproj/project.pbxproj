@@ -15,6 +15,7 @@
 		BA0F58B52C202398009FA9F9 /* TodoItem__YSHMR_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0F58B42C202398009FA9F9 /* TodoItem__YSHMR_UITests.swift */; };
 		BA0F58B72C202398009FA9F9 /* TodoItem__YSHMR_UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0F58B62C202398009FA9F9 /* TodoItem__YSHMR_UITestsLaunchTests.swift */; };
 		BA0F58C52C2023E1009FA9F9 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */; };
+		BA0F58C72C2051CE009FA9F9 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0F58C62C2051CE009FA9F9 /* FileCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		BA0F58B42C202398009FA9F9 /* TodoItem__YSHMR_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem__YSHMR_UITests.swift; sourceTree = "<group>"; };
 		BA0F58B62C202398009FA9F9 /* TodoItem__YSHMR_UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem__YSHMR_UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
+		BA0F58C62C2051CE009FA9F9 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */,
+				BA0F58C62C2051CE009FA9F9 /* FileCache.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 			files = (
 				BA0F58C52C2023E1009FA9F9 /* TodoItem.swift in Sources */,
 				BA0F589B2C202394009FA9F9 /* ContentView.swift in Sources */,
+				BA0F58C72C2051CE009FA9F9 /* FileCache.swift in Sources */,
 				BA0F58992C202394009FA9F9 /* TodoItem__YSHMR_App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
