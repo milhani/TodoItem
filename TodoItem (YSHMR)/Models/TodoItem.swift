@@ -97,6 +97,18 @@ extension TodoItem {
 extension TodoItem {
     private static let csvSeparator = ","
     
+    static var csvHeadLine: String {
+        var headline = [String]()
+        headline.append(Keys.id.rawValue)
+        headline.append(Keys.text.rawValue)
+        headline.append(Keys.importance.rawValue)
+        headline.append(Keys.deadline.rawValue)
+        headline.append(Keys.isDone.rawValue)
+        headline.append(Keys.createdAt.rawValue)
+        headline.append(Keys.updatedAt.rawValue)
+        return headline.joined(separator: Self.csvSeparator) + "\n"
+        }
+    
     static func parse(csv: String) -> TodoItem? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
