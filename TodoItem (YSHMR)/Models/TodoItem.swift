@@ -115,8 +115,7 @@ extension TodoItem {
         
         var data = csv.components(separatedBy: Self.csvSeparator)
         
-        if data.count < 6 { return nil }
-        data.remove(at: 0)
+        if data.count < 5 { return nil }
         
         let id = data[0]
         

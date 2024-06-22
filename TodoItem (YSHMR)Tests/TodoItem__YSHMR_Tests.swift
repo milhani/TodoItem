@@ -36,19 +36,15 @@ fileprivate enum MockConstants {
         "createdAt": 1686664070,
     ]
     static let fullCorrectCSV = """
-    id,text,importance,deadline,isDone,createdAt,updatedAt
     1,Unfortunately, she had not anticipated that others may be looking upon her from other angles, and now they were stealthily descending toward her hiding spot.,important,2024-06-15T23:10:23Z,true,2024-06-15T23:10:23Z,2024-06-15T23:10:23Z
     """
     static let createdAtInvalidCSV = """
-    id,text,importance,deadline,isDone,createdAt,updatedAt
     1,Unfortunately, she had not anticipated that others may be looking upon her from other angles, and now they were stealthily descending toward her hiding spot.,important,2024-06-15T23:10:23Z,true,,2024-06-15T23:10:23Z
     """
     static let minimumValidCSV = """
-    id,text,importance,deadline,isDone,createdAt,updatedAt
     1,Unfortunately, she had not anticipated that others may be looking upon her from other angles, and now they were stealthily descending toward her hiding spot.,,,true,2024-06-15T23:10:23Z,2024-06-15T23:15:23Z,
     """
     static let withoutOptionDatesCSV = """
-    id,text,importance,deadline,isDone,createdAt,updatedAt
     1,Unfortunately, she had not anticipated that others may be looking upon her from other angles, and now they were stealthily descending toward her hiding spot.,,,true,2024-06-15T23:10:23Z,
     """
 }
@@ -242,5 +238,17 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
         }
         XCTAssertNil(item.deadline)
         XCTAssertNil(item.updatedAt)
+    }
+    
+    //Проверка текста в csv
+    func testR() {
+        guard let item = TodoItem.parse(csv: MockConstants.fullCorrectCSV)
+        else {
+            XCTAssertNotNil(TodoItem.parse(csv: MockConstants.fullCorrectCSV))
+            return
+        }
+        
+        let text = "Unfortunately, she had not anticipated that others may be looking upon her from other angles, and now they were stealthily descending toward her hiding spot."
+        XCTAssertEqual(item.text, text)
     }
 }
