@@ -27,19 +27,19 @@ struct TodoItem {
     var createdAt: Date
     var updatedAt: Date?
     
-    init(id: String = UUID().uuidString,
+    init(id: String?,
          text: String,
          importance: Importance = .normal,
          deadline: Date? = nil,
-         isDone: Bool = false,
+         isDone: Bool?,
          createdAt: Date = Date(),
          updatedAt: Date? = nil)
     {
-        self.id = id
+        self.id = id ?? UUID().uuidString
         self.text = text
         self.importance = importance
         self.deadline = deadline
-        self.isDone = isDone
+        self.isDone = isDone ?? false
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
@@ -115,7 +115,8 @@ extension TodoItem {
         
         var data = csv.components(separatedBy: Self.csvSeparator)
         
-        if data.count < 5 { return nil }
+        if data.count < 6 { return nil }
+        data.remove(at: 0)
         
         let id = data[0]
         
@@ -150,19 +151,14 @@ extension TodoItem {
             data.removeSubrange(0...2)
         }
         
-        if data.count < 1 { return nil }
+        if data.count < 2 { return nil }
         
         let createdAt: Date
         guard let csvCreatedAt = dateFormatter.date(from: data[0]) else { return nil }
         createdAt = csvCreatedAt
         
         let updatedAt: Date?
-        if data.count == 2 {
-            guard let csvUpdatedAt = dateFormatter.date(from: data[1]) else { return nil }
-            updatedAt = csvUpdatedAt
-        } else {
-            updatedAt = nil
-        }
+        updatedAt = dateFormatter.date(from: data[1])
 
         return TodoItem(id: id, text: text, importance: importance, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updatedAt)
     }
@@ -181,14 +177,16 @@ extension TodoItem {
         }
 
         if let deadline = deadline {
-            csvString.append(String(deadline.timeIntervalSince1970))
+            csvString.append(String(Int(deadline.timeIntervalSince1970)))
         }
 
         csvString.append(String(isDone))
-        csvString.append(String(createdAt.timeIntervalSince1970))
+        csvString.append(String(Int(createdAt.timeIntervalSince1970)))
 
         if let updatedAt = updatedAt {
-            csvString.append(String(updatedAt.timeIntervalSince1970))
+            csvString.append(String(Int(updatedAt.timeIntervalSince1970)))
+        } else {
+            csvString.append("")
         }
 
         return csvString.joined(separator: Self.csvSeparator)
