@@ -19,13 +19,13 @@ enum Keys: String {
 
 
 struct TodoItem {
-    var id: String
-    var text: String
-    var importance: Importance
-    var deadline: Date?
-    var isDone: Bool
-    var createdAt: Date
-    var updatedAt: Date?
+    let id: String
+    let text: String
+    let importance: Importance
+    let deadline: Date?
+    let isDone: Bool
+    let createdAt: Date
+    let updatedAt: Date?
     
     init(id: String?,
          text: String,
