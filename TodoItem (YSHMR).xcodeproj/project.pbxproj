@@ -16,6 +16,13 @@
 		BA0F58B72C202398009FA9F9 /* TodoItem__YSHMR_UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0F58B62C202398009FA9F9 /* TodoItem__YSHMR_UITestsLaunchTests.swift */; };
 		BA0F58C52C2023E1009FA9F9 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */; };
 		BA0F58C72C2051CE009FA9F9 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0F58C62C2051CE009FA9F9 /* FileCache.swift */; };
+		BA9C0B7E2C2F72E80046C654 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B7D2C2F72E70046C654 /* Colors.swift */; };
+		BA9C0B812C2F76D30046C654 /* TodoCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B802C2F76D30046C654 /* TodoCellView.swift */; };
+		BA9C0B842C2F77830046C654 /* Color+Extencions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B832C2F77830046C654 /* Color+Extencions.swift */; };
+		BA9C0B862C2F7FF20046C654 /* TodoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B852C2F7FF20046C654 /* TodoItemView.swift */; };
+		BA9C0B882C2F8B920046C654 /* TodoItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B872C2F8B910046C654 /* TodoItemViewModel.swift */; };
+		BA9C0B8A2C2F972C0046C654 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B892C2F972C0046C654 /* TodoListView.swift */; };
+		BA9C0B8C2C2F97880046C654 /* TodoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +56,13 @@
 		BA0F58B62C202398009FA9F9 /* TodoItem__YSHMR_UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem__YSHMR_UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		BA0F58C62C2051CE009FA9F9 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
+		BA9C0B7D2C2F72E70046C654 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		BA9C0B802C2F76D30046C654 /* TodoCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCellView.swift; sourceTree = "<group>"; };
+		BA9C0B832C2F77830046C654 /* Color+Extencions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extencions.swift"; sourceTree = "<group>"; };
+		BA9C0B852C2F7FF20046C654 /* TodoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemView.swift; sourceTree = "<group>"; };
+		BA9C0B872C2F8B910046C654 /* TodoItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemViewModel.swift; sourceTree = "<group>"; };
+		BA9C0B892C2F972C0046C654 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
+		BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +113,12 @@
 		BA0F58972C202394009FA9F9 /* TodoItem (YSHMR) */ = {
 			isa = PBXGroup;
 			children = (
+				BA9C0B822C2F77630046C654 /* Extensions */,
+				BA9C0B7F2C2F76B20046C654 /* Views */,
+				BA9C0B7C2C2F72CF0046C654 /* Resources */,
 				BA0F58C32C2023AD009FA9F9 /* Models */,
 				BA0F58982C202394009FA9F9 /* TodoItem__YSHMR_App.swift */,
 				BA0F589A2C202394009FA9F9 /* ContentView.swift */,
-				BA0F589C2C202397009FA9F9 /* Assets.xcassets */,
 				BA0F589E2C202397009FA9F9 /* TodoItem__YSHMR_.entitlements */,
 				BA0F589F2C202397009FA9F9 /* Preview Content */,
 			);
@@ -139,8 +155,37 @@
 			children = (
 				BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */,
 				BA0F58C62C2051CE009FA9F9 /* FileCache.swift */,
+				BA9C0B872C2F8B910046C654 /* TodoItemViewModel.swift */,
+				BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		BA9C0B7C2C2F72CF0046C654 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BA0F589C2C202397009FA9F9 /* Assets.xcassets */,
+				BA9C0B7D2C2F72E70046C654 /* Colors.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BA9C0B7F2C2F76B20046C654 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BA9C0B802C2F76D30046C654 /* TodoCellView.swift */,
+				BA9C0B852C2F7FF20046C654 /* TodoItemView.swift */,
+				BA9C0B892C2F972C0046C654 /* TodoListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BA9C0B822C2F77630046C654 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BA9C0B832C2F77830046C654 /* Color+Extencions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,9 +318,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA9C0B8C2C2F97880046C654 /* TodoListViewModel.swift in Sources */,
 				BA0F58C52C2023E1009FA9F9 /* TodoItem.swift in Sources */,
+				BA9C0B7E2C2F72E80046C654 /* Colors.swift in Sources */,
+				BA9C0B8A2C2F972C0046C654 /* TodoListView.swift in Sources */,
 				BA0F589B2C202394009FA9F9 /* ContentView.swift in Sources */,
+				BA9C0B882C2F8B920046C654 /* TodoItemViewModel.swift in Sources */,
 				BA0F58C72C2051CE009FA9F9 /* FileCache.swift in Sources */,
+				BA9C0B842C2F77830046C654 /* Color+Extencions.swift in Sources */,
+				BA9C0B862C2F7FF20046C654 /* TodoItemView.swift in Sources */,
+				BA9C0B812C2F76D30046C654 /* TodoCellView.swift in Sources */,
 				BA0F58992C202394009FA9F9 /* TodoItem__YSHMR_App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,6 +415,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -415,6 +468,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -445,7 +499,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -483,7 +537,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;

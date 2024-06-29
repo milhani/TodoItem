@@ -1,11 +1,37 @@
-import Foundation
+import SwiftUI
 
 
-enum Importance: String {
+enum Importance: String, CaseIterable, Identifiable, Comparable {
     case low
     case normal
     case important
+    
+    private static func compare(_ lhs: Self, _ rhs: Self) -> Self {
+        switch (lhs, rhs) {
+        case (.low, _), (_, .low):
+            return .low
+        case (.normal, _), (_, .normal):
+            return .normal
+        case (.important, _), (_, .important):
+            return .important
+        }
+    }
+
+    static func < (lhs: Self, rhs: Self) -> Bool {
+        return (lhs != rhs) && (lhs == Self.compare(lhs, rhs))
+    }
+
+    var id: Self { self }
+
+    var symbol: AnyView {
+        switch self {
+        case .low: AnyView(Image(.importanceLow))
+        case .normal: AnyView(Text("нет"))
+        case .important: AnyView(Image(.importanceHigh))
+        }
+    }
 }
+
 
 enum Keys: String {
     case id
@@ -15,17 +41,19 @@ enum Keys: String {
     case isDone
     case createdAt
     case updatedAt
+    case color
 }
 
 
-struct TodoItem {
-    var id: String
-    var text: String
-    var importance: Importance
-    var deadline: Date?
-    var isDone: Bool
-    var createdAt: Date
-    var updatedAt: Date?
+struct TodoItem: Identifiable {
+    let id: String
+    let text: String
+    let importance: Importance
+    let deadline: Date?
+    let isDone: Bool
+    let createdAt: Date
+    let updatedAt: Date?
+    let color: String
     
     init(id: String?,
          text: String,
@@ -33,7 +61,8 @@ struct TodoItem {
          deadline: Date? = nil,
          isDone: Bool?,
          createdAt: Date = Date(),
-         updatedAt: Date? = nil)
+         updatedAt: Date? = nil,
+         color: String?)
     {
         self.id = id ?? UUID().uuidString
         self.text = text
@@ -42,6 +71,7 @@ struct TodoItem {
         self.isDone = isDone ?? false
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.color = color ?? "#fefefeff"
     }
 }
 
@@ -61,8 +91,9 @@ extension TodoItem {
         let deadline = (json[Keys.deadline.rawValue] as? Int).flatMap({ Date(timeIntervalSince1970: TimeInterval($0)) })
         let isDone = json[Keys.isDone.rawValue] as? Bool ?? false
         let updatedAt = (json[Keys.updatedAt.rawValue] as? Int).flatMap({ Date(timeIntervalSince1970: TimeInterval($0)) })
+        let color = json[Keys.color.rawValue] as? String ?? "#fefefeff"
         
-        return TodoItem(id: id, text: text, importance: importance, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updatedAt)
+        return TodoItem(id: id, text: text, importance: importance, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updatedAt, color: color)
     }
     
     var json: Any {
@@ -88,6 +119,8 @@ extension TodoItem {
         if let updatedAt = updatedAt {
             jsonDict[Keys.updatedAt.rawValue] = Int(updatedAt.timeIntervalSince1970)
         }
+        
+        jsonDict[Keys.color.rawValue] = color
         
         return jsonDict
     }
@@ -159,7 +192,7 @@ extension TodoItem {
         let updatedAt: Date?
         updatedAt = dateFormatter.date(from: data[1])
 
-        return TodoItem(id: id, text: text, importance: importance, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updatedAt)
+        return TodoItem(id: id, text: text, importance: importance, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updatedAt, color: nil)
     }
 
     var csv: String {

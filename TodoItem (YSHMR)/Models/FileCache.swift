@@ -12,8 +12,9 @@ enum Format {
 }
 
 
-final class FileCache {
-    private(set) var items: [String: TodoItem] = [:]
+final class FileCache: ObservableObject {
+    @Published private(set) var items: [String: TodoItem] = [:]
+    static let shared: FileCache = FileCache()
     
     func add(_ item: TodoItem) {
         items[item.id] = item

@@ -54,7 +54,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
     
     //Проверка, что ID сгенерирован
     func testA() {
-        let item = TodoItem(id: nil, text: "lala", importance: .normal, deadline: nil, isDone: true, createdAt: Date(), updatedAt: nil)
+        let item = TodoItem(id: nil, text: "lala", importance: .normal, deadline: nil, isDone: true, createdAt: Date(), updatedAt: nil, color: nil)
         
         XCTAssertNotNil(UUID(uuidString: item.id))
     }
@@ -71,7 +71,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
                 deadline = Date() + TimeInterval.random(in: 0..<100)
                 updateAt = Date() + TimeInterval.random(in: 0..<100)
             }
-            let item = TodoItem(id: "1", text: "lala", importance: .normal, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updateAt)
+            let item = TodoItem(id: "1", text: "lala", importance: .normal, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updateAt, color: nil)
             
             XCTAssertEqual(item.isDone, isDone)
             XCTAssertEqual(item.deadline, deadline)
@@ -82,7 +82,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
     
     //Проверка, что создается json с минимальным набором обязательных элементов
     func testC() {
-        let item = TodoItem(id: "1", text: "lala", importance: .normal, deadline: nil, isDone: true, createdAt: Date(), updatedAt: nil)
+        let item = TodoItem(id: "1", text: "lala", importance: .normal, deadline: nil, isDone: true, createdAt: Date(), updatedAt: nil, color: nil)
         let json = item.json
         XCTAssertNotNil(json)
         XCTAssertNotNil(json as? [String: Any])
@@ -95,7 +95,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
             let array: [Importance] = [.low, .normal, .important]
             let importance = array.randomElement()!
             
-            let item = TodoItem(id: "1", text: "lala", importance: importance, deadline: nil, isDone: true, createdAt: Date(), updatedAt: nil)
+            let item = TodoItem(id: "1", text: "lala", importance: importance, deadline: nil, isDone: true, createdAt: Date(), updatedAt: nil, color: nil)
             
             let json = item.json as? [String: Any]
             guard let containsImportance = json?.contains(where: { $0.key == Keys.importance.rawValue})
@@ -119,7 +119,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
             if i % 2 != 0 {
                 updateAt = Date() + TimeInterval.random(in: 0..<100)
             }
-            let item = TodoItem(id: "1", text: "lala", importance: .low, deadline: deadline, isDone: true, createdAt: Date(), updatedAt: updateAt)
+            let item = TodoItem(id: "1", text: "lala", importance: .low, deadline: deadline, isDone: true, createdAt: Date(), updatedAt: updateAt, color: nil)
             
             let json = item.json as? [String: Any]
             
@@ -176,7 +176,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
     
     //Проверка, что csv вычисляется правильно при всех данных
     func testJ() {
-        let item = TodoItem(id: "1", text: "lala", importance: .low, deadline: Date(timeIntervalSince1970: 1686664072), isDone: true, createdAt: Date(timeIntervalSince1970: 1686684070), updatedAt: Date(timeIntervalSince1970: 1686684072))
+        let item = TodoItem(id: "1", text: "lala", importance: .low, deadline: Date(timeIntervalSince1970: 1686664072), isDone: true, createdAt: Date(timeIntervalSince1970: 1686684070), updatedAt: Date(timeIntervalSince1970: 1686684072), color: nil)
         let string = "1,lala,low,1686664072,true,1686684070,1686684072"
         let csv = item.csv
         XCTAssertEqual(string, csv)
@@ -184,7 +184,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
     
     //Проверка, что в csv нет обычной важности
     func testK() {
-        let item = TodoItem(id: "1", text: "lala", importance: .normal, deadline: Date(timeIntervalSince1970: 1686664072), isDone: true, createdAt: Date(timeIntervalSince1970: 1686684070), updatedAt: Date(timeIntervalSince1970: 1686684072))
+        let item = TodoItem(id: "1", text: "lala", importance: .normal, deadline: Date(timeIntervalSince1970: 1686664072), isDone: true, createdAt: Date(timeIntervalSince1970: 1686684070), updatedAt: Date(timeIntervalSince1970: 1686684072), color: nil)
         let string = "1,lala,,1686664072,true,1686684070,1686684072"
         let csv = item.csv
         XCTAssertEqual(string, csv)
@@ -192,7 +192,7 @@ final class TodoItem__YSHMR_Tests: XCTestCase {
     
     //Проверка, что необязательные временные поля не записываются в csv в случае nil
     func testL() {
-        let item = TodoItem(id: "1", text: "lala,bebe", importance: .normal, deadline: nil, isDone: true, createdAt: Date(timeIntervalSince1970: 1686684070), updatedAt: nil)
+        let item = TodoItem(id: "1", text: "lala,bebe", importance: .normal, deadline: nil, isDone: true, createdAt: Date(timeIntervalSince1970: 1686684070), updatedAt: nil, color: nil)
         let string = "1,lala,bebe,,true,1686684070,"
         let csv = item.csv
         XCTAssertEqual(string, csv)
