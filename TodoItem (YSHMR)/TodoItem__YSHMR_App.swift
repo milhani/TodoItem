@@ -12,6 +12,8 @@ struct TodoItem__YSHMR_App: App {
     var body: some Scene {
         WindowGroup {
             TodoListView()
+//            TodoItemView(viewModel: <#T##Binding<TodoItemViewModel>#>)
+//            TodoItemView()
         }
     }
 }

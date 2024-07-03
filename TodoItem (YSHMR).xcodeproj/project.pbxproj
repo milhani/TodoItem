@@ -23,6 +23,7 @@
 		BA9C0B882C2F8B920046C654 /* TodoItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B872C2F8B910046C654 /* TodoItemViewModel.swift */; };
 		BA9C0B8A2C2F972C0046C654 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B892C2F972C0046C654 /* TodoListView.swift */; };
 		BA9C0B8C2C2F97880046C654 /* TodoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */; };
+		BAF897EB2C3573A000486267 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897EA2C3573A000486267 /* ColorPickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		BA9C0B872C2F8B910046C654 /* TodoItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemViewModel.swift; sourceTree = "<group>"; };
 		BA9C0B892C2F972C0046C654 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 		BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewModel.swift; sourceTree = "<group>"; };
+		BAF897EA2C3573A000486267 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,8 +176,9 @@
 			isa = PBXGroup;
 			children = (
 				BA9C0B802C2F76D30046C654 /* TodoCellView.swift */,
-				BA9C0B852C2F7FF20046C654 /* TodoItemView.swift */,
 				BA9C0B892C2F972C0046C654 /* TodoListView.swift */,
+				BA9C0B852C2F7FF20046C654 /* TodoItemView.swift */,
+				BAF897EA2C3573A000486267 /* ColorPickerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				BA9C0B882C2F8B920046C654 /* TodoItemViewModel.swift in Sources */,
 				BA0F58C72C2051CE009FA9F9 /* FileCache.swift in Sources */,
 				BA9C0B842C2F77830046C654 /* Color+Extencions.swift in Sources */,
+				BAF897EB2C3573A000486267 /* ColorPickerView.swift in Sources */,
 				BA9C0B862C2F7FF20046C654 /* TodoItemView.swift in Sources */,
 				BA9C0B812C2F76D30046C654 /* TodoCellView.swift in Sources */,
 				BA0F58992C202394009FA9F9 /* TodoItem__YSHMR_App.swift in Sources */,
