@@ -2,114 +2,118 @@ import SwiftUI
 
 
 struct TodoItemView: View {
-    
     @StateObject var viewModel: TodoItemViewModel
-    @FocusState private var isOn
+    @State private var showDatePicker = false
     @Environment(\.dismiss) var dismiss
     
-    @State private var selectedColor = Colors.primaryGreen
-    @State private var brightness: Double = 0.5
-
     var body: some View {
         NavigationStack {
             List {
-                Group {
-                    Section {
-                        newEventTextView
+                Section {
+                    newEventTextField
+                }
+                Section {
+                    importanceField
+                    colorField
+                    deadlineField
+                    
+                    if showDatePicker {
+                        datePicker
                     }
-                    Section {
-                        importanceField
-                        colorField
-                        deadlineField
-                        if viewModel.isDeadlineEnabled {
-                            datePicker
-                        }
-                    }
-                    Section {
-                        deleteButton
-                    }
+                }
+                Section {
+                    deleteButton
                 }
                 .listRowBackground(Colors.backgroundSecondary)
                 .listRowSeparatorTint(Colors.primarySeparator)
+                .listRowSpacing(16)
             }
-            .background(Colors.backgroundPrimary)
-            .scrollContentBackground(.hidden)
-            .listSectionSpacing(16)
-            .navigationTitle("Дело")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("Отмена")
-                            .font(.body)
-                            .foregroundStyle(Colors.primaryBlue)
+                .background(Colors.backgroundPrimary)
+                .navigationTitle("Дело")
+                .navigationBarTitleDisplayMode(.inline)
+                .scrollContentBackground(.hidden)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(action: { dismiss() }, label: {
+                            Text("Отменить")
+                                .font(.headline)
+                                .foregroundStyle(Colors.primaryBlue)
+                        })
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: {
+                            viewModel.saveItem()
+                            dismiss()
+                        }, label: {
+                            Text("Сохранить")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundStyle(!viewModel.text.isEmpty ? Colors.primaryBlue : Colors.labelTertiary)
+                            
+                            
+                        })
+                        .disabled(viewModel.text.isEmpty)
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        viewModel.saveItem()
-                        dismiss()
-                    } label: {
-                        Text("Сохранить")
-                            .font(.body)
-                            .foregroundStyle(!viewModel.text.isEmpty ? Colors.primaryBlue : Colors.labelTertiary)
-                            .bold()
-                    }
-                    .disabled(viewModel.text.isEmpty)
-                }
-            }
         }
     }
-
-    @available(iOS 17.0, *)
-    private var newEventTextView: some View {
-        TextField(
-            "",
-            text: $viewModel.text,
-            prompt: Text("Что надо сделать?").foregroundStyle(Colors.labelTertiary),
-            axis: .vertical
-        )
-        .frame(minHeight: 120, alignment: .topLeading)
-        .focused($isOn)
-        .font(.body)
-        .foregroundStyle(Colors.labelPrimary)
-        .overlay(
-            HStack {
-                Spacer()
-                Rectangle()
-                    .fill(viewModel.color)
-                    .frame(width: 5)
-                    .padding(.trailing, -5)
-                    .padding(.vertical, -12)
-            }
-        )
-    }
     
+    private var newEventTextField: some View {
+        HStack {
+            TextField(
+                "",
+                text: $viewModel.text,
+                prompt: Text("Что надо сделать?").foregroundStyle(Colors.labelTertiary),
+                axis: .vertical
+            )
+                .frame(minHeight: 120, alignment: .topLeading)
+                .font(.body)
+                .foregroundStyle(Colors.labelPrimary)
+            Color(viewModel.color)
+                .frame(width: 5)
+                .cornerRadius(2.5)
+                .padding(.vertical, 0)
+        }
+    }
+        
     private var importanceField: some View {
         HStack {
             Text("Важность")
                 .font(.body)
                 .foregroundStyle(Colors.labelPrimary)
-                .truncationMode(.tail)
             Spacer()
             Picker("", selection: $viewModel.importance) {
                 ForEach(Importance.allCases) { $0.symbol }
             }
-            .frame(maxWidth: 150)
             .pickerStyle(.segmented)
             .backgroundStyle(Colors.overlay)
+            .padding(.vertical, 10)
+            .scaledToFit()
         }
+    }
+    
+    private var colorField: some View {
+        VStack {
+            HStack {
+                Text("Цвет")
+                Spacer(minLength: 1)
+                Text("#" + String(format: "%06X", (viewModel.color.rgbColor)))
+                }
+            Spacer()
+            ColorPickerView(viewModel: viewModel)
+            }
     }
     
     private var deadlineField: some View {
         VStack {
-            Toggle(isOn: $viewModel.isDeadlineEnabled.animation()) {
+            Toggle(isOn: $viewModel.isDeadlineEnabled) {
                 Text("Сделать до")
                     .font(.body)
                     .foregroundStyle(Colors.labelPrimary)
-                    .truncationMode(.tail)
+                .onChange(of: viewModel.isDeadlineEnabled) { newValue in
+                    showDatePicker = !newValue ? false : true
+                }
             }
             if viewModel.isDeadlineEnabled {
                 HStack {
@@ -118,30 +122,15 @@ struct TodoItemView: View {
                     )
                     .font(.footnote)
                     .foregroundStyle(Colors.primaryBlue)
+                    .fontWeight(.bold)
+                    .onTapGesture {
+                        withAnimation {
+                            showDatePicker.toggle()
+                        }
+                    }
                     Spacer()
                 }
             }
-        }
-    }
-    
-    private var colorField: some View {
-        VStack {
-            HStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundColor(selectedColor.adjust(brightness: brightness))
-                    .frame(width: 44, height: 44)
-                    .padding(.leading, 8)
-                Spacer(minLength: 1)
-                Text("#" + String(format: "%06X", (selectedColor.rgbColor)))
-                    .padding()
-                Spacer()
-                ColorPicker("", selection: $selectedColor)
-                    .padding()
-            }
-
-            Slider(value: $brightness, in: 0.0...1.0)
-                .padding()
-                
         }
     }
     
@@ -152,6 +141,9 @@ struct TodoItemView: View {
             displayedComponents: .date
         )
         .datePickerStyle(.graphical)
+        .onChange(of: viewModel.selectedDeadline) { newValue in
+            showDatePicker = false
+        }
     }
     
     private var deleteButton: some View {
@@ -161,11 +153,10 @@ struct TodoItemView: View {
         } label: {
             Text("Удалить")
                 .frame(maxWidth: .infinity)
+                .frame(minHeight: 40)
                 .font(.body)
                 .foregroundStyle(viewModel.isNew ? Colors.labelTertiary : Colors.primaryRed)
         }
         .disabled(viewModel.isNew)
     }
 }
-
-
