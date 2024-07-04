@@ -2,8 +2,8 @@ import SwiftUI
 
 
 enum SortType: String {
-    case highSort = "По возрастанию важности"
-    case lowSort = "По убыванию важности"
+    case addSort = "Сортировка по добавлению"
+    case importanceSort = "Сортировка по важности"
 }
 
 
@@ -21,7 +21,7 @@ final class TodoListViewModel: ObservableObject {
     @Published var fileCache: FileCache
     
     @Published var chosenSorting: Bool = true
-    @Published var sortType: SortType = .lowSort
+    @Published var sortType: SortType = .importanceSort
     
     var items: [TodoItem] {
         changeItems(items: Array(fileCache.items.values))
@@ -75,18 +75,18 @@ final class TodoListViewModel: ObservableObject {
     }
 
     func changeImportance() {
-        if sortType == .lowSort {
-            sortType = .highSort
+        if sortType == .importanceSort {
+            sortType = .addSort
         } else {
-            sortType = .lowSort
+            sortType = .importanceSort
         }
     }
 
     private func changeItems(items: [TodoItem]) -> [TodoItem] {
         var result = switch sortType {
-        case .highSort:
+        case .addSort:
             items.sorted { $0.importance > $1.importance}
-        case .lowSort:
+        case .importanceSort:
             items.sorted { $0.createdAt < $1.createdAt}
         }
         if !chosenSorting {
