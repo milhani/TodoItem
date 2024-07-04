@@ -2,13 +2,12 @@ import SwiftUI
 
 
 struct TodoCellView: View {
-
     let todoItem: TodoItem
     let action: () -> Void
     let radioButtonAction: () -> Void
 
     var body: some View {
-       HStack(spacing: 12) {
+       HStack {
             radioButton
                 .padding(.trailing, 12)
                 .onTapGesture {
@@ -28,13 +27,16 @@ struct TodoCellView: View {
             Spacer()
             Image(.chevron)
                 .padding(.trailing, 5)
+                .onTapGesture {
+                    action()
+                }
             Rectangle()
-                .fill(Color(hex: todoItem.color))
-                .frame(width: 5)
-                .padding(.vertical, -5)
+               .fill(Color(hex: todoItem.color))
+               .frame(width: 5)
+               .clipShape(.rect(cornerRadius: 5))
+               .padding(.trailing, -5)
+               .padding(.vertical, -5)
         }
-       .padding(.horizontal, 16)
-       .padding(.vertical, 16)
     }
 
     private var textOfItem: some View {
@@ -71,7 +73,7 @@ struct TodoCellView: View {
         HStack {
             Image(.calendar)
                 .foregroundStyle(Colors.labelTertiary)
-            Text(deadline.formatted(.dateTime.day().month().year()))
+            Text(deadline.formatted(.dateTime.day().month()))
                 .foregroundColor(Colors.labelTertiary)
                 .font(.subheadline)
         }
