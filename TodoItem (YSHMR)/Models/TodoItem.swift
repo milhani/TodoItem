@@ -42,6 +42,7 @@ enum Keys: String {
     case createdAt
     case updatedAt
     case color
+    case category
 }
 
 
@@ -54,6 +55,7 @@ struct TodoItem: Identifiable {
     let createdAt: Date
     let updatedAt: Date?
     let color: String
+    let category: Category
     
     init(id: String?,
          text: String,
@@ -62,7 +64,8 @@ struct TodoItem: Identifiable {
          isDone: Bool?,
          createdAt: Date = Date(),
          updatedAt: Date? = nil,
-         color: String?)
+         color: String?,
+         category: Category? = nil)
     {
         self.id = id ?? UUID().uuidString
         self.text = text
@@ -72,6 +75,7 @@ struct TodoItem: Identifiable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.color = color ?? "#fefefeff"
+        self.category = category ?? Category.defaultCategories.first!
     }
 }
 
@@ -92,8 +96,16 @@ extension TodoItem {
         let isDone = json[Keys.isDone.rawValue] as? Bool ?? false
         let updatedAt = (json[Keys.updatedAt.rawValue] as? Int).flatMap({ Date(timeIntervalSince1970: TimeInterval($0)) })
         let color = json[Keys.color.rawValue] as? String ?? "#fefefeff"
+        let category = json[Keys.category.rawValue] as? String ?? "Другое"
         
-        return TodoItem(id: id, text: text, importance: importance, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updatedAt, color: color)
+        var categoryColor: String = "#FFFFFF"
+        for cat in Category.defaultCategories {
+            if cat.name == category {
+                categoryColor = cat.color
+            }
+        }
+        
+        return TodoItem(id: id, text: text, importance: importance, deadline: deadline, isDone: isDone, createdAt: createdAt, updatedAt: updatedAt, color: color, category: Category(name: category, color: categoryColor))
     }
     
     var json: Any {
@@ -121,6 +133,7 @@ extension TodoItem {
         }
         
         jsonDict[Keys.color.rawValue] = color
+        jsonDict[Keys.category.rawValue] = category.name
         
         return jsonDict
     }
