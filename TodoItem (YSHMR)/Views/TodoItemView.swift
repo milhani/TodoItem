@@ -4,6 +4,7 @@ import SwiftUI
 struct TodoItemView: View {
     @StateObject var viewModel: TodoItemViewModel
     @State private var showDatePicker = false
+    @State private var showCategoryPicker = false
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -15,6 +16,7 @@ struct TodoItemView: View {
                 Section {
                     importanceField
                     colorField
+                    categoryField
                     deadlineField
                     
                     if showDatePicker {
@@ -143,6 +145,42 @@ struct TodoItemView: View {
         .datePickerStyle(.graphical)
         .onChange(of: viewModel.selectedDeadline) { newValue in
             showDatePicker = false
+        }
+    }
+    
+    private var categoryField: some View {
+        Group {
+            HStack {
+                Text("Категория")
+                    .font(.body)
+                    .foregroundStyle(Colors.labelPrimary)
+                Spacer()
+                Button(action: {
+                    showCategoryPicker.toggle()
+                }, label: {
+                    HStack {
+                        Text(viewModel.category.name)
+                            .font(.body)
+                            .foregroundStyle(Colors.labelPrimary)
+                        Image(systemName: "circle.fill")
+                            .foregroundColor(Color.init(hex: viewModel.category.color))
+                    }
+                })
+            }
+                
+            if showCategoryPicker {
+                Picker("", selection: $viewModel.category) {
+                    ForEach(Category.defaultCategories) { category in
+                        HStack {
+                            Text(category.name)
+                                .font(.body)
+                                .foregroundStyle(Colors.labelPrimary)
+//                            Image(systemName: "circle.fill")
+//                                .foregroundColor(Color.init(hex: category.color))
+                        }
+                    }
+                }
+            }
         }
     }
     

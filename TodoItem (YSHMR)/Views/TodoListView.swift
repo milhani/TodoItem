@@ -8,67 +8,90 @@ struct TodoListView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    ForEach(viewModel.items) { todoItem in
-                        TodoCellView(
-                            todoItem: todoItem,
-                            action: {
-                                viewModel.selectedItem = todoItem
-                                viewModel.todoViewPresented = true
-                            },
-                            radioButtonAction: {
-                                viewModel.toggleDone(todoItem)
-                            }
-                        )
-                        .swipeActions(edge: .leading) {
-                            Button(role: .cancel) { viewModel.toggleDone(todoItem) }
-                                label: {
-                                    if todoItem.isDone {
-                                        Label("Невыполнено", systemImage: "x.circle.fill").tint(Colors.primaryRed)
-                                    } else {
-                                        Label("Выполнено", systemImage: "checkmark.circle.fill").tint(Colors.primaryGreen)
-                                    }
-                            }
-                            
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                viewModel.delete(todoItem)
-                            } label: {
-                                Label("Удалить", systemImage: "trash")
-                            }
-                            .tint(Colors.primaryRed)
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button {
-                                viewModel.selectedItem = todoItem
-                                viewModel.todoViewPresented = true
-                            } label: {
-                                Label("Информация", systemImage: "info.circle.fill")
-                            }
-                            .tint(Colors.primaryLightGray)
-                        }
+            VStack {
+                HStack {
+                    Text("Мои дела")
+                        .font(.largeTitle.bold())
+                    
+                    Spacer()
+                    
+                    NavigationLink {
+                        CalendarViewControllerRepresentable()
+                    } label: {
+                        Image(systemName: "calendar")
+                            .font(.largeTitle)
+                            .foregroundColor(Colors.primaryBlue)
                     }
-                    newTodoItemView
-                } header: { headerView }
-                    .listRowBackground(Colors.backgroundSecondary)
+                    
+                }
+                .padding(.bottom, 0)
+                .padding(.top, 16)
+                //.padding(.leading, 16)
+                .padding(.horizontal, 25)
+                List {
+                    Section {
+                        ForEach(viewModel.items) { todoItem in
+                            TodoCellView(
+                                todoItem: todoItem,
+                                action: {
+                                    viewModel.selectedItem = todoItem
+                                    viewModel.todoViewPresented = true
+                                },
+                                radioButtonAction: {
+                                    viewModel.toggleDone(todoItem)
+                                }
+                            )
+                            .swipeActions(edge: .leading) {
+                                Button(role: .cancel) { viewModel.toggleDone(todoItem) }
+                            label: {
+                                if todoItem.isDone {
+                                    Label("Невыполнено", systemImage: "x.circle.fill").tint(Colors.primaryRed)
+                                } else {
+                                    Label("Выполнено", systemImage: "checkmark.circle.fill").tint(Colors.primaryGreen)
+                                }
+                            }
+                                
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    viewModel.delete(todoItem)
+                                } label: {
+                                    Label("Удалить", systemImage: "trash")
+                                }
+                                .tint(Colors.primaryRed)
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    viewModel.selectedItem = todoItem
+                                    viewModel.todoViewPresented = true
+                                } label: {
+                                    Label("Информация", systemImage: "info.circle.fill")
+                                }
+                                .tint(Colors.primaryLightGray)
+                            }
+                        }
+                        newTodoItemView
+                    } header: { headerView }
+                        .listRowBackground(Colors.backgroundSecondary)
+                }
+                .scrollContentBackground(.hidden)
+                //.navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("")
+                .navigationBarHidden(true)
+                //.navigationBarTitleDisplayMode(.large)
+                .safeAreaInset(edge: .bottom) {
+                    floatingButton
+                }
+                .sheet(isPresented: $viewModel.todoViewPresented) {
+                    
+                    TodoItemView (
+                        viewModel: TodoItemViewModel(
+                            todoItem: viewModel.openedItem
+                        )
+                    )
+                }
             }
             .background(Colors.backgroundPrimary)
-            .scrollContentBackground(.hidden)
-            .navigationTitle("Мои дела")
-            .navigationBarTitleDisplayMode(.large)
-            .safeAreaInset(edge: .bottom) {
-                floatingButton
-            }
-            .sheet(isPresented: $viewModel.todoViewPresented) {
-                
-                TodoItemView (
-                    viewModel: TodoItemViewModel(
-                        todoItem: viewModel.openedItem
-                    )
-                )
-            }
         }
     }
 
@@ -100,6 +123,18 @@ struct TodoListView: View {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .foregroundStyle(Colors.primaryWhite, Colors.primaryBlue)
+                .frame(width: 44, height: 44, alignment: .center)
+                .padding(.vertical, 10)
+        }
+    }
+    
+    private var calenderButton: some View {
+        Button {
+            print("Tap")
+        } label: {
+            Image(systemName: "calendar")
+                .resizable()
+                .foregroundStyle(Colors.primaryGray)
                 .frame(width: 44, height: 44, alignment: .center)
                 .padding(.vertical, 10)
         }

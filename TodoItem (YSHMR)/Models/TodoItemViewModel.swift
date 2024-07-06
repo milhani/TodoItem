@@ -8,6 +8,7 @@ class TodoItemViewModel: ObservableObject {
     @Published var deadline: Date?
     @Published var updatedAt: Date?
     @Published var color: Color
+    @Published var category: Category
     
     @Published var selectedDeadline: Date = Date() + 86400 {
         didSet {
@@ -25,6 +26,7 @@ class TodoItemViewModel: ObservableObject {
 
     private let todoItem: TodoItem
     private let fileCache: FileCache
+    weak var delegate: TodoListViewControllerDelegate?
 
     init(todoItem: TodoItem, fileCache: FileCache = FileCache.shared) {
         self.todoItem = todoItem
@@ -36,19 +38,22 @@ class TodoItemViewModel: ObservableObject {
         self.isDeadlineEnabled = todoItem.deadline != nil
         self.selectedDeadline = todoItem.deadline ?? Date() + 86400
         self.color = Color(hex: todoItem.color)
+        self.category = todoItem.category ?? Category.defaultCategories.first!
     }
 
     func saveItem() {
         let newItem = TodoItem(id: todoItem.id, text: text, importance: importance,
                                deadline: deadline, isDone: todoItem.isDone, createdAt: todoItem.createdAt,
-                               updatedAt: updatedAt, color: color.hex)
+                               updatedAt: updatedAt, color: color.hex, category: category)
         fileCache.add(newItem)
         try? fileCache.save(to: "items.json", format: .json)
+        delegate?.didUpdateTodoList()
     }
 
     func removeItem() {
         fileCache.remove(todoItem.id)
         try? fileCache.save(to: "items.json", format: .json)
+        delegate?.didUpdateTodoList()
     }
 
 }

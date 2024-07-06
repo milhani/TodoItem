@@ -24,6 +24,15 @@
 		BA9C0B8A2C2F972C0046C654 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B892C2F972C0046C654 /* TodoListView.swift */; };
 		BA9C0B8C2C2F97880046C654 /* TodoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */; };
 		BAF897EB2C3573A000486267 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897EA2C3573A000486267 /* ColorPickerView.swift */; };
+		BAF897F02C387BF500486267 /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897EF2C387BF400486267 /* DateCell.swift */; };
+		BAF897F22C387C0200486267 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897F12C387C0200486267 /* ItemCell.swift */; };
+		BAF897F42C388A4D00486267 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897F32C388A4D00486267 /* CalendarViewController.swift */; };
+		BAF897F62C388D3900486267 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897F52C388D3900486267 /* Calendar.swift */; };
+		BAF897F82C388DF800486267 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897F72C388DF800486267 /* Category.swift */; };
+		BAF897FA2C38A5F200486267 /* CalendarViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897F92C38A5F100486267 /* CalendarViewControllerRepresentable.swift */; };
+		BAF897FC2C38B13700486267 /* CalendarViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897FB2C38B13700486267 /* CalendarViewController+Extensions.swift */; };
+		BAF897FE2C38BB8000486267 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897FD2C38BB8000486267 /* CalendarView.swift */; };
+		BAF898002C38C78600486267 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF897FF2C38C78600486267 /* UILabel+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +74,15 @@
 		BA9C0B892C2F972C0046C654 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 		BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewModel.swift; sourceTree = "<group>"; };
 		BAF897EA2C3573A000486267 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
+		BAF897EF2C387BF400486267 /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
+		BAF897F12C387C0200486267 /* ItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
+		BAF897F32C388A4D00486267 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		BAF897F52C388D3900486267 /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
+		BAF897F72C388DF800486267 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		BAF897F92C38A5F100486267 /* CalendarViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewControllerRepresentable.swift; sourceTree = "<group>"; };
+		BAF897FB2C38B13700486267 /* CalendarViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarViewController+Extensions.swift"; sourceTree = "<group>"; };
+		BAF897FD2C38BB8000486267 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		BAF897FF2C38C78600486267 /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +133,7 @@
 		BA0F58972C202394009FA9F9 /* TodoItem (YSHMR) */ = {
 			isa = PBXGroup;
 			children = (
+				BAF897EE2C387BC700486267 /* Calendar */,
 				BA9C0B822C2F77630046C654 /* Extensions */,
 				BA9C0B7F2C2F76B20046C654 /* Views */,
 				BA9C0B7C2C2F72CF0046C654 /* Resources */,
@@ -155,10 +174,12 @@
 		BA0F58C32C2023AD009FA9F9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				BAF897F52C388D3900486267 /* Calendar.swift */,
 				BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */,
 				BA0F58C62C2051CE009FA9F9 /* FileCache.swift */,
 				BA9C0B872C2F8B910046C654 /* TodoItemViewModel.swift */,
 				BA9C0B8B2C2F97880046C654 /* TodoListViewModel.swift */,
+				BAF897F72C388DF800486267 /* Category.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -187,8 +208,22 @@
 			isa = PBXGroup;
 			children = (
 				BA9C0B832C2F77830046C654 /* Color+Extencions.swift */,
+				BAF897FF2C38C78600486267 /* UILabel+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		BAF897EE2C387BC700486267 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				BAF897EF2C387BF400486267 /* DateCell.swift */,
+				BAF897F12C387C0200486267 /* ItemCell.swift */,
+				BAF897FD2C38BB8000486267 /* CalendarView.swift */,
+				BAF897F32C388A4D00486267 /* CalendarViewController.swift */,
+				BAF897F92C38A5F100486267 /* CalendarViewControllerRepresentable.swift */,
+				BAF897FB2C38B13700486267 /* CalendarViewController+Extensions.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,18 +356,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAF897F42C388A4D00486267 /* CalendarViewController.swift in Sources */,
 				BA9C0B8C2C2F97880046C654 /* TodoListViewModel.swift in Sources */,
+				BAF898002C38C78600486267 /* UILabel+Extensions.swift in Sources */,
+				BAF897FC2C38B13700486267 /* CalendarViewController+Extensions.swift in Sources */,
 				BA0F58C52C2023E1009FA9F9 /* TodoItem.swift in Sources */,
 				BA9C0B7E2C2F72E80046C654 /* Colors.swift in Sources */,
 				BA9C0B8A2C2F972C0046C654 /* TodoListView.swift in Sources */,
+				BAF897F82C388DF800486267 /* Category.swift in Sources */,
 				BA0F589B2C202394009FA9F9 /* ContentView.swift in Sources */,
+				BAF897FE2C38BB8000486267 /* CalendarView.swift in Sources */,
 				BA9C0B882C2F8B920046C654 /* TodoItemViewModel.swift in Sources */,
 				BA0F58C72C2051CE009FA9F9 /* FileCache.swift in Sources */,
 				BA9C0B842C2F77830046C654 /* Color+Extencions.swift in Sources */,
+				BAF897F02C387BF500486267 /* DateCell.swift in Sources */,
 				BAF897EB2C3573A000486267 /* ColorPickerView.swift in Sources */,
 				BA9C0B862C2F7FF20046C654 /* TodoItemView.swift in Sources */,
 				BA9C0B812C2F76D30046C654 /* TodoCellView.swift in Sources */,
+				BAF897F62C388D3900486267 /* Calendar.swift in Sources */,
+				BAF897FA2C38A5F200486267 /* CalendarViewControllerRepresentable.swift in Sources */,
 				BA0F58992C202394009FA9F9 /* TodoItem__YSHMR_App.swift in Sources */,
+				BAF897F22C387C0200486267 /* ItemCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

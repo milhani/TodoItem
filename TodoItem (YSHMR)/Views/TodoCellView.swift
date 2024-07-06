@@ -9,7 +9,7 @@ struct TodoCellView: View {
     var body: some View {
        HStack {
             radioButton
-                .padding(.trailing, 12)
+                //.padding(.leading, 5)
                 .onTapGesture {
                     radioButtonAction()
                 }
@@ -24,19 +24,22 @@ struct TodoCellView: View {
                     deadlineLabel(deadline)
                 }
             }
+           
             Spacer()
+           
             Image(.chevron)
                 .padding(.trailing, 5)
                 .onTapGesture {
                     action()
                 }
+           
             Rectangle()
                .fill(Color(hex: todoItem.color))
                .frame(width: 5)
-               .clipShape(.rect(cornerRadius: 5))
-               .padding(.trailing, -5)
+               //.padding(.trailing, -5)
                .padding(.vertical, -5)
         }
+       .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0))
     }
 
     private var textOfItem: some View {
