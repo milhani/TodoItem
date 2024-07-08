@@ -55,6 +55,7 @@ final class TodoListViewModel: ObservableObject {
     func addItem(_ item: TodoItem) {
         fileCache.add(item)
         try? fileCache.save(to: "items.json", format: .json)
+        
     }
 
     func delete(_ item: TodoItem) {

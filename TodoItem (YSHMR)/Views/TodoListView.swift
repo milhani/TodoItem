@@ -16,7 +16,7 @@ struct TodoListView: View {
                     Spacer()
                     
                     NavigationLink {
-                        CalendarViewControllerRepresentable()
+                        CalendarViewControllerRepresentable(viewModel: viewModel)
                     } label: {
                         Image(systemName: "calendar")
                             .font(.largeTitle)

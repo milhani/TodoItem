@@ -62,10 +62,39 @@ final class CalendarViewController: UIViewController {
         for date in sortedDates {
             sections.append(dateSection(date: date, todos: dict[date] ?? []))
         }
+        
     }
     
     override func loadView() {
         view = contentView
+    }
+    
+    func sectionsUpdate() {
+        var grouped: [String: [TodoItem]] = [:]
+        for item in todoListViewModel.items {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "YYYY-MM-dd"
+            let keyDict: String
+            
+            if let deadline = item.deadline {
+                keyDict = dateFormatter.string(from: deadline)
+            } else {
+                keyDict = "Другое"
+            }
+            
+            grouped[keyDict, default: []].append(item)
+        }
+        dict = grouped
+        
+        var newDates = dict.keys.filter({ $0 != "Другое" }).sorted()
+        newDates.append("Другое")
+        dates = newDates
+        
+        sections = [dateSection]()
+        let sortedDates = dict.keys.sorted()
+        for date in sortedDates {
+            sections.append(dateSection(date: date, todos: dict[date] ?? []))
+        }
     }
 }
 

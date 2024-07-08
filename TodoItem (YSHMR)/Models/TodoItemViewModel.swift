@@ -25,10 +25,12 @@ class TodoItemViewModel: ObservableObject {
     var isNew: Bool { fileCache.items[todoItem.id] == nil }
 
     private let todoItem: TodoItem
-    private let fileCache: FileCache
+    private var fileCache: FileCache
+    private var calendarViewController: CalendarViewController?
     weak var delegate: TodoListViewControllerDelegate?
 
-    init(todoItem: TodoItem, fileCache: FileCache = FileCache.shared) {
+    init(todoItem: TodoItem, fileCache: FileCache = FileCache.shared,
+         calendarViewController: CalendarViewController? = nil) {
         self.todoItem = todoItem
         self.fileCache = fileCache
         self.text = todoItem.text
@@ -38,7 +40,11 @@ class TodoItemViewModel: ObservableObject {
         self.isDeadlineEnabled = todoItem.deadline != nil
         self.selectedDeadline = todoItem.deadline ?? Date() + 86400
         self.color = Color(hex: todoItem.color)
-        self.category = todoItem.category ?? Category.defaultCategories.first!
+        self.category = todoItem.category
+        if let calendarViewController {
+            self.calendarViewController = calendarViewController
+            self.delegate = calendarViewController
+        }
     }
 
     func saveItem() {

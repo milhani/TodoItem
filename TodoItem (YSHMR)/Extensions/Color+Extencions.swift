@@ -63,9 +63,10 @@ extension Color {
         return r + g + b
     }
     
-    var hex: String? {
-        guard let components = cgColor?.components, components.count >= 3 else {
-            return nil
+    var hex: String {
+        let uiColor = UIColor(self)
+        guard let components = uiColor.cgColor.components, components.count >= 3 else {
+            return "#e600ff"
         }
 
         let r = components[0]

@@ -63,7 +63,6 @@ extension CalendarViewController: UICollectionViewDelegate {
             contentView.collectionView.scrollToItem(at: indexPath, at: .left, animated: true)
         }
     }
-    
 }
 
 extension CalendarViewController: UITableViewDataSource {
@@ -110,6 +109,8 @@ extension CalendarViewController: UITableViewDataSource {
         cell.configure(with: task)
         return cell
     }
+    
+    
 }
 
 
@@ -122,8 +123,8 @@ extension CalendarViewController: UITableViewDelegate {
 extension CalendarViewController {
     @objc func openTodoItemView() {
         let newItem = todoListViewModel.openedItem
-        todoListViewModel.addItem(newItem)
-        let viewModel = TodoItemViewModel(todoItem: newItem)
+        let fileCache = todoListViewModel.fileCache
+        let viewModel = TodoItemViewModel(todoItem: newItem, fileCache: fileCache, calendarViewController: self)
         let swiftUIHostingController = UIHostingController(rootView: TodoItemView(viewModel: viewModel))
         present(swiftUIHostingController, animated: true)
     }
@@ -131,7 +132,9 @@ extension CalendarViewController {
 
 extension CalendarViewController: TodoListViewControllerDelegate {
     func didUpdateTodoList() {
+        sectionsUpdate()
         contentView.tableView.reloadData()
         contentView.collectionView.reloadData()
+        todoListViewModel.todoViewPresented = false
     }
 }

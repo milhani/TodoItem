@@ -15,7 +15,7 @@ final class CalendarView: UIView {
         return collectionView
     }()
     
-    let tableView: UITableView = {
+    lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.register(
             ItemCell.self,
@@ -26,7 +26,14 @@ final class CalendarView: UIView {
         return tableView
     }()
     
-    let separatorView: UIView = {
+    lazy var separatorViewFirst: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(resource: .labelTertiary)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var separatorViewSecond: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(resource: .labelTertiary)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -45,8 +52,10 @@ final class CalendarView: UIView {
     
     var button: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "plus.circle.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.frame.size.width = 44
+        button.frame.size.height = 44
         return button
     }()
     
@@ -54,9 +63,10 @@ final class CalendarView: UIView {
         super.init(frame: frame)
         
         backgroundColor = UIColor(resource: .backPrimary)
+        addSubview(separatorViewFirst)
         addSubview(titleLabel)
         addSubview(collectionView)
-        addSubview(separatorView)
+        addSubview(separatorViewSecond)
         addSubview(tableView)
         addSubview(button)
         setConstraints()
@@ -90,30 +100,33 @@ final class CalendarView: UIView {
     
     func setConstraints() {
         NSLayoutConstraint.activate([
+            separatorViewFirst.topAnchor.constraint(equalTo: topAnchor, constant: 43),
+            separatorViewFirst.widthAnchor.constraint(equalTo: widthAnchor),
+            separatorViewFirst.heightAnchor.constraint(equalToConstant: 1),
+            separatorViewFirst.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
             collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 80),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            separatorView.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
-            separatorView.widthAnchor.constraint(equalTo: widthAnchor),
-            separatorView.heightAnchor.constraint(equalToConstant: 1),
-            separatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            separatorViewSecond.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            separatorViewSecond.widthAnchor.constraint(equalTo: widthAnchor),
+            separatorViewSecond.heightAnchor.constraint(equalToConstant: 1),
+            separatorViewSecond.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            tableView.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: separatorViewSecond.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            //button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            button.centerXAnchor.constraint(equalTo: centerXAnchor),
             button.widthAnchor.constraint(equalToConstant: 44),
-            button.heightAnchor.constraint(equalToConstant: 44)
-            
-            
+            button.heightAnchor.constraint(equalToConstant: 44),
+            button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }
     

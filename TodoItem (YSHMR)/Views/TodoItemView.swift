@@ -174,12 +174,11 @@ struct TodoItemView: View {
                         HStack {
                             Text(category.name)
                                 .font(.body)
-                                .foregroundStyle(Colors.labelPrimary)
-//                            Image(systemName: "circle.fill")
-//                                .foregroundColor(Color.init(hex: category.color))
                         }
                     }
                 }
+                .tint(Colors.labelPrimary)
+                .pickerStyle(.palette)
             }
         }
     }

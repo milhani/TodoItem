@@ -2,7 +2,12 @@ import SwiftUI
 
 
 struct CalendarViewControllerRepresentable: UIViewControllerRepresentable {
-    let viewModel = TodoListViewModel()
+    
+    let viewModel: TodoListViewModel
+
+    init(viewModel: TodoListViewModel) {
+        self.viewModel = viewModel
+    }
     
     func makeUIViewController(context: Context) -> UINavigationController {
         let navigationController = UINavigationController()
@@ -12,6 +17,5 @@ struct CalendarViewControllerRepresentable: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
-        
     }
 }
