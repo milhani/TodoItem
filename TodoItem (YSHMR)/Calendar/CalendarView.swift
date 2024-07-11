@@ -45,17 +45,14 @@ final class CalendarView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.text = "Мои дела"
         return label
     }()
     
     var button: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.frame.size.width = 44
-        button.frame.size.height = 44
         return button
     }()
     
@@ -70,6 +67,7 @@ final class CalendarView: UIView {
         addSubview(tableView)
         addSubview(button)
         setConstraints()
+        setButtonImage()
     }
 
     required init?(coder: NSCoder) {
@@ -98,12 +96,15 @@ final class CalendarView: UIView {
         return layout
     }
     
-    func setConstraints() {
+    private func setConstraints() {
         NSLayoutConstraint.activate([
-            separatorViewFirst.topAnchor.constraint(equalTo: topAnchor, constant: 43),
+            separatorViewFirst.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: -1),
             separatorViewFirst.widthAnchor.constraint(equalTo: widthAnchor),
             separatorViewFirst.heightAnchor.constraint(equalToConstant: 1),
             separatorViewFirst.centerXAnchor.constraint(equalTo: centerXAnchor),
+            
+            titleLabel.bottomAnchor.constraint(equalTo: separatorViewFirst.topAnchor, constant: -20),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 80),
@@ -120,15 +121,18 @@ final class CalendarView: UIView {
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
-            button.widthAnchor.constraint(equalToConstant: 44),
-            button.heightAnchor.constraint(equalToConstant: 44),
+            button.widthAnchor.constraint(equalToConstant: 50),
+            button.heightAnchor.constraint(equalToConstant: 50),
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
-            button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+            button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -45)
         ])
     }
     
+    private func setButtonImage() {
+        button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
+        button.imageView?.contentMode = .scaleToFill
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+    }
     
 }

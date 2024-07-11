@@ -22,6 +22,7 @@ final class TodoListViewModel: ObservableObject {
     
     @Published var chosenSorting: Bool = true
     @Published var sortType: SortType = .importanceSort
+    @Published var isUpdateCalendar = false
     
     var items: [TodoItem] {
         changeItems(items: Array(fileCache.items.values))
@@ -55,6 +56,7 @@ final class TodoListViewModel: ObservableObject {
     func addItem(_ item: TodoItem) {
         fileCache.add(item)
         try? fileCache.save(to: "items.json", format: .json)
+        isUpdateCalendar = true
         
     }
 
@@ -81,6 +83,10 @@ final class TodoListViewModel: ObservableObject {
         } else {
             sortType = .importanceSort
         }
+    }
+    
+    func checkItems() {
+        isUpdateCalendar = true
     }
 
     private func changeItems(items: [TodoItem]) -> [TodoItem] {

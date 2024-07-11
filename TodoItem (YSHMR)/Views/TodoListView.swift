@@ -5,6 +5,7 @@ struct TodoListView: View {
 
     @StateObject var viewModel = TodoListViewModel()
     @FocusState private var isOn
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         NavigationStack {
@@ -16,17 +17,20 @@ struct TodoListView: View {
                     Spacer()
                     
                     NavigationLink {
-                        CalendarViewControllerRepresentable(viewModel: viewModel)
+                        let calendarView = CalendarViewControllerRepresentable(viewModel: viewModel)
+                        calendarView
+                            .ignoresSafeArea()
                     } label: {
                         Image(systemName: "calendar")
                             .font(.largeTitle)
                             .foregroundColor(Colors.primaryBlue)
                     }
+                    .ignoresSafeArea(.container)
+                    .foregroundColor(.black)
                     
                 }
                 .padding(.bottom, 0)
                 .padding(.top, 16)
-                //.padding(.leading, 16)
                 .padding(.horizontal, 25)
                 List {
                     Section {
@@ -75,10 +79,8 @@ struct TodoListView: View {
                         .listRowBackground(Colors.backgroundSecondary)
                 }
                 .scrollContentBackground(.hidden)
-                //.navigationBarTitleDisplayMode(.inline)
                 .navigationTitle("")
                 .navigationBarHidden(true)
-                //.navigationBarTitleDisplayMode(.large)
                 .safeAreaInset(edge: .bottom) {
                     floatingButton
                 }
@@ -95,6 +97,15 @@ struct TodoListView: View {
         }
     }
 
+    private var backButton: some View {
+        Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+            viewModel.checkItems()
+            print(viewModel.$isUpdateCalendar)
+        }){
+            Text("back")
+                }
+    }
 
     private var newTodoItemView: some View {
         TextField(
@@ -130,7 +141,7 @@ struct TodoListView: View {
     
     private var calenderButton: some View {
         Button {
-            print("Tap")
+            print("")
         } label: {
             Image(systemName: "calendar")
                 .resizable()

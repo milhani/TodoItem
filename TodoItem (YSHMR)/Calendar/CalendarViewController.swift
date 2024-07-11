@@ -96,5 +96,25 @@ final class CalendarViewController: UIViewController {
             sections.append(dateSection(date: date, todos: dict[date] ?? []))
         }
     }
+    
+    func didSwipe(at indexPath: IndexPath, isLeading: Bool) {
+        let selectedItem = sections[indexPath.section].todos[indexPath.row]
+        
+        let updatedItem = TodoItem(
+            id: selectedItem.id,
+            text: selectedItem.text,
+            importance: selectedItem.importance,
+            deadline: selectedItem.deadline,
+            isDone: isLeading,
+            createdAt: selectedItem.createdAt,
+            updatedAt: selectedItem.updatedAt,
+            color: selectedItem.color,
+            category: selectedItem.category
+        )
+        
+        todoListViewModel.delete(selectedItem)
+        todoListViewModel.addItem(updatedItem)
+        sectionsUpdate()
+    }
 }
 

@@ -25,7 +25,7 @@ class TodoItemViewModel: ObservableObject {
     var isNew: Bool { fileCache.items[todoItem.id] == nil }
 
     private let todoItem: TodoItem
-    private var fileCache: FileCache
+    var fileCache: FileCache
     private var calendarViewController: CalendarViewController?
     weak var delegate: TodoListViewControllerDelegate?
 

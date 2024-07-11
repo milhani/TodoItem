@@ -12,7 +12,7 @@ protocol TodoListViewControllerDelegate: AnyObject {
 
 extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 72, height: 72)
+        return CGSize(width: 80, height: 80)
     }
     
 }
@@ -109,14 +109,30 @@ extension CalendarViewController: UITableViewDataSource {
         cell.configure(with: task)
         return cell
     }
-    
-    
 }
 
 
 extension CalendarViewController: UITableViewDelegate {
     func scrollToTableCell(at indexPath: IndexPath, animated: Bool = true) {
         contentView.tableView.scrollToRow(at: indexPath, at: .top, animated: animated)
+    }
+    
+    @objc func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, _  in
+            self?.didSwipe(at: indexPath, isLeading: true)
+            self?.contentView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        action.image = UIImage(named: "radioButtonOn")
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+    
+    @objc func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, _ in
+            self?.didSwipe(at: indexPath, isLeading: false)
+            self?.contentView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        action.image = UIImage(named: "radioButtonOff")
+        return UISwipeActionsConfiguration(actions: [action])
     }
 }
 
@@ -135,6 +151,6 @@ extension CalendarViewController: TodoListViewControllerDelegate {
         sectionsUpdate()
         contentView.tableView.reloadData()
         contentView.collectionView.reloadData()
-        todoListViewModel.todoViewPresented = false
+        todoListViewModel.checkItems()
     }
 }
