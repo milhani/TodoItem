@@ -1,4 +1,5 @@
 import SwiftUI
+import CocoaLumberjackSwift
 
 
 enum SortType: String {
@@ -55,14 +56,26 @@ final class TodoListViewModel: ObservableObject {
 
     func addItem(_ item: TodoItem) {
         fileCache.add(item)
-        try? fileCache.save(to: "items.json", format: .json)
-        isUpdateCalendar = true
+        
+        do {
+            try fileCache.save(to: "items.json", format: .json)
+            isUpdateCalendar = true
+            DDLogInfo("Новая заметка \(item) сохранена в \(Self.self)")
+        } catch {
+            DDLogError("Ошибка сохранения в \(Self.self)")
+        }
         
     }
 
     func delete(_ item: TodoItem) {
         fileCache.remove(item.id)
-        try? fileCache.save(to: "items.json", format: .json)
+
+        do {
+            try fileCache.save(to: "items.json", format: .json)
+            DDLogInfo("Заметка была удалена, инвормация сохранена в \(Self.self)")
+        } catch {
+            DDLogError("Ошибка сохранения в \(Self.self)")
+        }
     }
 
     func toggleShowCompleted() {
@@ -74,7 +87,13 @@ final class TodoListViewModel: ObservableObject {
                                deadline: item.deadline, isDone: !item.isDone, createdAt: item.createdAt,
                                updatedAt: item.updatedAt, color: item.color)
         fileCache.add(newItem)
-        try? fileCache.save(to: "items.json", format: .json)
+        
+        do {
+            try fileCache.save(to: "items.json", format: .json)
+            DDLogInfo("Заметка поменяла статус выполнения на \(newItem.isDone)")
+        } catch {
+            DDLogError("Ошибка сохранения в \(Self.self)")
+        }
     }
 
     func changeImportance() {
@@ -92,13 +111,14 @@ final class TodoListViewModel: ObservableObject {
     private func changeItems(items: [TodoItem]) -> [TodoItem] {
         var result = switch sortType {
         case .addSort:
-            items.sorted { $0.importance > $1.importance}
+            items.sorted { $0.importance > $1.importance }
         case .importanceSort:
-            items.sorted { $0.createdAt < $1.createdAt}
+            items.sorted { $0.createdAt < $1.createdAt }
         }
         if !chosenSorting {
             result = result.filter { !$0.isDone }
         }
+        DDLogInfo("Изменение ключа сортировки")
         return result
     }
 

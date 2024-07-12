@@ -1,5 +1,5 @@
 import SwiftUI
-
+import CocoaLumberjackSwift
 
 class TodoItemViewModel: ObservableObject {
 
@@ -52,14 +52,28 @@ class TodoItemViewModel: ObservableObject {
                                deadline: deadline, isDone: todoItem.isDone, createdAt: todoItem.createdAt,
                                updatedAt: updatedAt, color: color.hex, category: category)
         fileCache.add(newItem)
-        try? fileCache.save(to: "items.json", format: .json)
-        delegate?.didUpdateTodoList()
+        
+        do {
+            try fileCache.save(to: "items.json", format: .json)
+            delegate?.didUpdateTodoList()
+            DDLogInfo("Новая заметка \(newItem) сохранена в \(Self.self)")
+        } catch {
+            DDLogError("Ошибка сохранения в \(Self.self)")
+        }
     }
 
     func removeItem() {
         fileCache.remove(todoItem.id)
         try? fileCache.save(to: "items.json", format: .json)
         delegate?.didUpdateTodoList()
+        
+        do {
+            try fileCache.save(to: "items.json", format: .json)
+            delegate?.didUpdateTodoList()
+            DDLogInfo("Заметка была удалена, инвормация сохранена в \(Self.self)")
+        } catch {
+            DDLogError("Ошибка сохранения в \(Self.self)")
+        }
     }
 
 }

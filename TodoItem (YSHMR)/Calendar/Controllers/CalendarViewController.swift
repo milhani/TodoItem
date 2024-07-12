@@ -1,5 +1,6 @@
 import UIKit
 import SwiftUI
+import CocoaLumberjackSwift
 
 
 struct dateSection {
@@ -67,6 +68,7 @@ final class CalendarViewController: UIViewController {
     
     override func loadView() {
         view = contentView
+        DDLogInfo("Загрузка экрана календаря \(Self.self)")
     }
     
     func sectionsUpdate() {
@@ -95,6 +97,7 @@ final class CalendarViewController: UIViewController {
         for date in sortedDates {
             sections.append(dateSection(date: date, todos: dict[date] ?? []))
         }
+        DDLogInfo("Обновление секций с делами \(sections)")
     }
     
     func didSwipe(at indexPath: IndexPath, isLeading: Bool) {
@@ -115,6 +118,7 @@ final class CalendarViewController: UIViewController {
         todoListViewModel.delete(selectedItem)
         todoListViewModel.addItem(updatedItem)
         sectionsUpdate()
+        DDLogInfo("Обновление заметки с \(selectedItem) на \(updatedItem)")
     }
 }
 
