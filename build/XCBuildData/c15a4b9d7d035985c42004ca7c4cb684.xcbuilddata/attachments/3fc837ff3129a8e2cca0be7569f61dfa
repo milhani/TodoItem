@@ -1,0 +1,5 @@
+ extern const unsigned char Pods_TodoItem__YSHMR__TodoItem__YSHMR_UITestsVersionString[];
+ extern const double Pods_TodoItem__YSHMR__TodoItem__YSHMR_UITestsVersionNumber;
+
+ const unsigned char Pods_TodoItem__YSHMR__TodoItem__YSHMR_UITestsVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:Pods_TodoItem__YSHMR__TodoItem__YSHMR_UITests  PROJECT:Pods-1" "\n";
+ const double Pods_TodoItem__YSHMR__TodoItem__YSHMR_UITestsVersionNumber __attribute__ ((used)) = (double)1.;

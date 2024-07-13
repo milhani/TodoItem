@@ -1,4 +1,5 @@
 import SwiftUI
+import MyLibrary
 
 
 enum Importance: String, CaseIterable, Identifiable, Comparable {
@@ -46,7 +47,8 @@ enum Keys: String {
 }
 
 
-struct TodoItem: Identifiable {
+struct TodoItem: Identifiable, FileCachable {
+    
     let id: String
     let text: String
     let importance: Importance
@@ -143,7 +145,7 @@ extension TodoItem {
 extension TodoItem {
     private static let csvSeparator = ","
     
-    static var csvHeadLine: String {
+    var csvHeadLine: String {
         var headline = [String]()
         headline.append(Keys.id.rawValue)
         headline.append(Keys.text.rawValue)
