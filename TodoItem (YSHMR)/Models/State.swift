@@ -1,8 +1,8 @@
-//
-//  State.swift
-//  TodoItem (YSHMR)
-//
-//  Created by Людмила Ханина on 13.07.2024.
-//
-
 import Foundation
+
+
+enum State {
+    case ready
+    case running(URLSessionTask)
+    case canceling
+}
