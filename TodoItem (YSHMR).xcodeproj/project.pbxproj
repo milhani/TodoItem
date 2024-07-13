@@ -22,7 +22,7 @@
 		BA82219E2C420518002FA899 /* MyLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = BA82219D2C420518002FA899 /* MyLibrary */; };
 		BA8221A02C421237002FA899 /* App+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA82219F2C421237002FA899 /* App+Extensions.swift */; };
 		BA8221A22C4214AC002FA899 /* URLSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8221A12C4214AC002FA899 /* URLSession+Extensions.swift */; };
-		BA8221A42C421DF7002FA899 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8221A32C421DF6002FA899 /* State.swift */; };
+		BA8221A42C421DF7002FA899 /* StateTaskSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8221A32C421DF6002FA899 /* StateTaskSession.swift */; };
 		BA9C0B7E2C2F72E80046C654 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B7D2C2F72E70046C654 /* Colors.swift */; };
 		BA9C0B812C2F76D30046C654 /* TodoCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B802C2F76D30046C654 /* TodoCellView.swift */; };
 		BA9C0B842C2F77830046C654 /* Color+Extencions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C0B832C2F77830046C654 /* Color+Extencions.swift */; };
@@ -84,7 +84,7 @@
 		BA82219A2C4200F3002FA899 /* MyLibrary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MyLibrary; sourceTree = "<group>"; };
 		BA82219F2C421237002FA899 /* App+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App+Extensions.swift"; sourceTree = "<group>"; };
 		BA8221A12C4214AC002FA899 /* URLSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extensions.swift"; sourceTree = "<group>"; };
-		BA8221A32C421DF6002FA899 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		BA8221A32C421DF6002FA899 /* StateTaskSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateTaskSession.swift; sourceTree = "<group>"; };
 		BA9C0B7D2C2F72E70046C654 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		BA9C0B802C2F76D30046C654 /* TodoCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCellView.swift; sourceTree = "<group>"; };
 		BA9C0B832C2F77830046C654 /* Color+Extencions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extencions.swift"; sourceTree = "<group>"; };
@@ -235,7 +235,7 @@
 				BA0F58C42C2023E1009FA9F9 /* TodoItem.swift */,
 				BA0F58C62C2051CE009FA9F9 /* FileCache.swift */,
 				BAF897F72C388DF800486267 /* Category.swift */,
-				BA8221A32C421DF6002FA899 /* State.swift */,
+				BA8221A32C421DF6002FA899 /* StateTaskSession.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -543,7 +543,7 @@
 				BAF897FA2C38A5F200486267 /* CalendarViewControllerRepresentable.swift in Sources */,
 				BA0F58992C202394009FA9F9 /* TodoItem__YSHMR_App.swift in Sources */,
 				BAF897F22C387C0200486267 /* ItemCell.swift in Sources */,
-				BA8221A42C421DF7002FA899 /* State.swift in Sources */,
+				BA8221A42C421DF7002FA899 /* StateTaskSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

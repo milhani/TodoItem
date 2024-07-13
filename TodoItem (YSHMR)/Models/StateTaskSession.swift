@@ -1,7 +1,7 @@
 import Foundation
 
 
-enum State {
+enum StateTaskSession {
     case ready
     case running(URLSessionTask)
     case canceling

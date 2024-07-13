@@ -2,7 +2,7 @@ import Foundation
 
 
 actor SessionTask {
-    var state: State = .ready
+    var state: StateTaskSession = .ready
 
     func set(for urlRequest: URLRequest, on session: URLSession,
                completionHandler: @Sendable @escaping (Data?, URLResponse?, Error?) -> Void) {
@@ -27,7 +27,6 @@ actor SessionTask {
 }
 
 extension URLSession {
-
     func data(for urlRequest: URLRequest) async throws -> (Data, URLResponse) {
         let task = SessionTask()
 
