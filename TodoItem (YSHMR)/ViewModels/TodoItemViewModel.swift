@@ -1,5 +1,6 @@
 import SwiftUI
 import CocoaLumberjackSwift
+import MyLibrary
 
 class TodoItemViewModel: ObservableObject {
 
@@ -25,11 +26,11 @@ class TodoItemViewModel: ObservableObject {
     var isNew: Bool { fileCache.items[todoItem.id] == nil }
 
     private let todoItem: TodoItem
-    var fileCache: FileCache
+    var fileCache: FileCache<TodoItem>
     private var calendarViewController: CalendarViewController?
     weak var delegate: TodoListViewControllerDelegate?
 
-    init(todoItem: TodoItem, fileCache: FileCache = FileCache.shared,
+    init(todoItem: TodoItem, fileCache: FileCache<TodoItem>,
          calendarViewController: CalendarViewController? = nil) {
         self.todoItem = todoItem
         self.fileCache = fileCache

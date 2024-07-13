@@ -1,0 +1,6 @@
+framework module Pods_TodoItem__YSHMR_Tests {
+  umbrella header "Pods-TodoItem (YSHMR)Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

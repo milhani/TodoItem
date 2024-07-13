@@ -3,7 +3,7 @@ import SwiftUI
 
 struct TodoListView: View {
 
-    @StateObject var viewModel = TodoListViewModel()
+    @StateObject var viewModel: TodoListViewModel
     @FocusState private var isOn
     @Environment(\.presentationMode) var presentationMode
 
@@ -88,7 +88,7 @@ struct TodoListView: View {
                     
                     TodoItemView (
                         viewModel: TodoItemViewModel(
-                            todoItem: viewModel.openedItem
+                            todoItem: viewModel.openedItem, fileCache: viewModel.fileCache
                         )
                     )
                 }

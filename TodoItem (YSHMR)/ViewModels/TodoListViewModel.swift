@@ -1,4 +1,5 @@
 import SwiftUI
+import MyLibrary
 import CocoaLumberjackSwift
 
 
@@ -19,7 +20,7 @@ final class TodoListViewModel: ObservableObject {
     }
     @Published var selectedItem: TodoItem?
     @Published var newTodo: String = ""
-    @Published var fileCache: FileCache
+    @Published var fileCache: FileCache<TodoItem>
     
     @Published var chosenSorting: Bool = true
     @Published var sortType: SortType = .importanceSort
@@ -49,7 +50,7 @@ final class TodoListViewModel: ObservableObject {
         fileCache.items.values.filter({ $0.isDone }).count
     }
 
-    init(fileCache: FileCache = FileCache.shared) {
+    init(fileCache: FileCache<TodoItem>) {
         self.fileCache = fileCache
         try? self.fileCache.load(from: "items.json", format: .json)
     }

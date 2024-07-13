@@ -1,0 +1,8 @@
+Target dependency graph (4 targets)
+Target 'Pods-TodoItem (YSHMR)Tests' in project 'Pods'
+➜ Explicit dependency on target 'Pods-TodoItem (YSHMR)' in project 'Pods'
+Target 'Pods-TodoItem (YSHMR)-TodoItem (YSHMR)UITests' in project 'Pods'
+➜ Explicit dependency on target 'SwiftLint' in project 'Pods'
+Target 'Pods-TodoItem (YSHMR)' in project 'Pods'
+➜ Explicit dependency on target 'SwiftLint' in project 'Pods'
+Target 'SwiftLint' in project 'Pods' (no dependencies)
