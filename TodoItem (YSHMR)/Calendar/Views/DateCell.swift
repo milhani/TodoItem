@@ -8,6 +8,13 @@ final class DateCell: UICollectionViewCell {
     private var monthLabel = UILabel()
     
     private lazy var contentStackView: UIStackView = {
+        if monthLabel.text == "" {
+            let stack = UIStackView(arrangedSubviews: [dayLabel])
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            stack.axis = .vertical
+            stack.alignment = .center
+            return stack
+        }
         let stack = UIStackView(arrangedSubviews: [dayLabel, monthLabel])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
@@ -31,6 +38,9 @@ final class DateCell: UICollectionViewCell {
     
     func setDayLabel(text: String?) {
         dayLabel = customLabel(label: dayLabel, text: text)
+        if dayLabel.text == "Другое" {
+            dayLabel.font = UIFont.systemFont(ofSize: 12)
+        }
     }
     
     func setMonthLabel(text: String?) {
