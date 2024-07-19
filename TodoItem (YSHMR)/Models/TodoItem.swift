@@ -47,7 +47,7 @@ enum Keys: String {
 }
 
 
-struct TodoItem: Identifiable, FileCachable {
+struct TodoItem: Identifiable {
     
     let id: String
     let text: String

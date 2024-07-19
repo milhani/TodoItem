@@ -1,14 +1,6 @@
 import Foundation
+import TodoItem__YSHMR_
 
-public protocol FileCachable {
-    var id: String { get }
-    var json: Any { get }
-    var csv: String { get }
-    var csvHeadLine: String { get }
-    
-    static func parse(json: Any) -> Self?
-    static func parse(csv: String) -> Self?
-}
 
 
 public enum FileCacheErrors: Error {
@@ -24,20 +16,40 @@ public enum Format {
 }
 
 
-public final class FileCache<T: FileCachable>  {
-    public private(set) var items: [String: T] = [:]
-    //static let shared: FileCache = FileCache()
+public final class FileCache: FileCacheProtocol  {
+    
+    private var todoItems: [TodoItem]
+    private var isDirty = false
+    private let filename: String
+    private let fileFormat: Format
+    
+    
+    public init(filename: String, fileFormat: Format) {
+        self.filename = filename
+        self.todoItems = []
+        self.fileFormat = fileFormat
+        _ = load(from: filename, format: fileFormat)
+    }
+
     
     public func add(_ item: T) {
         items[item.id] = item
+        save(to: filename, format: fileFormat)
     }
     
     public func remove(_ id: String) {
         guard items[id] != nil else { return }
         items.removeValue(forKey: id)
+        save(to: filename, format: fileFormat)
     }
     
-    public init() { }
+    public func setDirty(_ isDirty: Bool) {
+        self.isDirty = isDirty
+    }
+    
+    public func getIsDirty() -> Bool {
+        return self.isDirty
+    }
     
     public func save(to file: String, format: Format) throws {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -79,16 +91,16 @@ public final class FileCache<T: FileCachable>  {
                 let json = try JSONSerialization.jsonObject(with: data, options: [])
                 
                 guard let json = json as? [Any] else { throw FileCacheErrors.incorrectData }
-                let newItems = json.compactMap { T.parse(json: $0) }
-                self.items = newItems.reduce(into: [String: T]()) { newArray, item in
+                let newItems = json.compactMap { TodoItem.parse(json: $0) }
+                self.todoItems = newItems.reduce(into: [String: TodoItem]()) { newArray, item in
                     newArray[item.id] = item
                 }
             case .csv:
                 var data = try String(contentsOf: path).components(separatedBy: "\n")
                 guard !data.isEmpty else { throw FileCacheErrors.incorrectData }
                 data.removeFirst()
-                let newItems = data.compactMap { T.parse(csv: $0) }
-                self.items = newItems.reduce(into: [String: T]()) { newArray, item in
+                let newItems = data.compactMap { TodoItem.parse(csv: $0) }
+                self.todoItems = newItems.reduce(into: [String: TodoItem]()) { newArray, item in
                     newArray[item.id] = item
                 }
             }
