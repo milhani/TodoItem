@@ -44,12 +44,16 @@ enum Keys: String {
     case updatedAt
     case color
     case category
+    
+    case revision
+    case element
+    case list
 }
 
 
-struct TodoItem: Identifiable {
+public struct TodoItem: Identifiable, FileCachable {
     
-    let id: String
+    public let id: String
     let text: String
     let importance: Importance
     let deadline: Date?
@@ -82,7 +86,7 @@ struct TodoItem: Identifiable {
 }
 
 
-extension TodoItem {
+public extension TodoItem {
     static func parse(json: Any) -> TodoItem? {
         guard
             let json = json as? [String: Any],
@@ -142,7 +146,7 @@ extension TodoItem {
 }
 
 
-extension TodoItem {
+public extension TodoItem {
     private static let csvSeparator = ","
     
     var csvHeadLine: String {

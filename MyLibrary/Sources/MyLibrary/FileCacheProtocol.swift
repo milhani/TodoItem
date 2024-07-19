@@ -1,9 +1,10 @@
 import Foundation
-import TodoItem__YSHMR_
 
 
 public protocol FileCacheProtocol {
-    static func add(_ item: TodoItem)
+    associatedtype T: FileCachable
+    
+    static func add(_ item: T)
     static func remove(_ id: String)
 
     static func save(to file: String, format: Format) throws
