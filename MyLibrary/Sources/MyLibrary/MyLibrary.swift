@@ -66,7 +66,7 @@ public final class FileCache: FileCacheProtocol  {
                 let data = try JSONSerialization.data(withJSONObject: serializedItems, options: [])
                 try data.write(to: path)
             case .csv:
-                //var data = T.csvHeadLine
+                var data = TodoItem.csvHeadLine
                 var data = items.map { _, item in item.csv }.joined(separator: "\n")
                 try data.write(to: path, atomically: true, encoding: .utf8)
 
