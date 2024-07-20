@@ -30,7 +30,7 @@ final class CalendarViewController: UIViewController {
     lazy var dict: [String: [TodoItem]] = {
         var grouped: [String: [TodoItem]] = [:]
         
-        for item in todoListViewModel.items {
+        for item in todoListViewModel.tasks {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "YYYY-MM-dd"
             let keyDict: String
@@ -73,7 +73,7 @@ final class CalendarViewController: UIViewController {
     
     func sectionsUpdate() {
         var grouped: [String: [TodoItem]] = [:]
-        for item in todoListViewModel.items {
+        for item in todoListViewModel.tasks {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "YYYY-MM-dd"
             let keyDict: String

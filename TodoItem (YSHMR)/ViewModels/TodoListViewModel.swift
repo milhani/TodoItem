@@ -20,14 +20,18 @@ final class TodoListViewModel: ObservableObject {
     }
     @Published var selectedItem: TodoItem?
     @Published var newTodo: String = ""
-    @Published var fileCache: FileCache<TodoItem>
+
+    var connection: ServerViewConnection
     
     @Published var chosenSorting: Bool = true
     @Published var sortType: SortType = .importanceSort
     @Published var isUpdateCalendar = false
     
-    var items: [TodoItem] {
-        changeItems(items: Array(fileCache.items.values))
+    var tasks: [TodoItem] = []
+    
+    init(connection: ServerViewConnection) {
+        self.connection = connection
+        reloadItems()
     }
     
     var openedItem: TodoItem {
@@ -47,36 +51,90 @@ final class TodoListViewModel: ObservableObject {
     }
 
     var doneCounter: Int {
-        fileCache.items.values.filter({ $0.isDone }).count
+        connection.fileCache.todoItems.values.filter({ $0.isDone }).count
     }
-
-    init(fileCache: FileCache<TodoItem>) {
-        self.fileCache = fileCache
-        try? self.fileCache.load(from: "items.json", format: .json)
+    
+    private func reloadItems() {
+        let tasks = connection.getLocally()
+        let sortedTasks = changeItems(items: tasks)
+        self.tasks = sortedTasks
+        
+        guard !connection.fileCache.getIsDirty() else {
+            return reloadDirtyList()
+        }
+        
+        Task.detached(operation: { [weak self] in
+            do {
+                if let tasks = try await self?.connection.get() {
+                    let sortedTasks = self!.changeItems(items: tasks)
+                    self?.tasks = sortedTasks
+                    var lst: [String: TodoItem] = [:]
+                    for el in tasks {
+                        lst[el.id] = el
+                    }
+                    self?.connection.fileCache.todoItems = lst
+                }
+            } catch {
+                self?.connection.fileCache.setDirty(true)
+            }
+        })
     }
 
     func addItem(_ item: TodoItem) {
-        fileCache.add(item)
+        _ = connection.saveLocally(item: item)
+        reloadItems()
         
-        do {
-            try fileCache.save(to: "items.json", format: .json)
-            isUpdateCalendar = true
-            DDLogInfo("Новая заметка \(item) сохранена в \(Self.self)")
-        } catch {
-            DDLogError("Ошибка сохранения в \(Self.self)")
+        guard !connection.fileCache.getIsDirty() else {
+            return reloadDirtyList()
         }
         
+        Task.detached(operation: { [weak self] in
+            do {
+                try await self?.connection.save(item: item)
+                self?.isUpdateCalendar = true
+                DDLogInfo("Новая заметка \(item) сохранена в \(Self.self)")
+            } catch {
+                self?.connection.fileCache.setDirty(true)
+                DDLogError("Ошибка сохранения в \(Self.self)")
+            }
+        })
     }
 
     func delete(_ item: TodoItem) {
-        fileCache.remove(item.id)
-
-        do {
-            try fileCache.save(to: "items.json", format: .json)
-            DDLogInfo("Заметка была удалена, инвормация сохранена в \(Self.self)")
-        } catch {
-            DDLogError("Ошибка сохранения в \(Self.self)")
+        _ = connection.deleteLocally(id: item.id)
+        reloadItems()
+        
+        guard !connection.fileCache.getIsDirty() else {
+            return reloadDirtyList()
         }
+        
+        Task.detached(operation: { [weak self] in
+            do {
+                try await self?.connection.delete(id: item.id)
+                DDLogInfo("Заметка была удалена, инвормация сохранена в \(Self.self)")
+            } catch {
+                self?.connection.fileCache.setDirty(true)
+                DDLogError("Ошибка сохранения в \(Self.self)")
+            }
+        })
+    }
+    
+    func reloadDirtyList() {
+        Task.detached(operation: { [weak self] in
+            do {
+                let items = try await self?.connection.updateItems()
+                if let items = items {
+                    var lst: [String: TodoItem] = [:]
+                    for el in items {
+                        lst[el.id] = el
+                    }
+                    self?.connection.fileCache.todoItems = lst
+                }
+                self?.connection.fileCache.setDirty(false)
+            } catch {
+                self?.connection.fileCache.setDirty(true)
+            }
+        })
     }
 
     func toggleShowCompleted() {
@@ -87,14 +145,10 @@ final class TodoListViewModel: ObservableObject {
         let newItem = TodoItem(id: item.id, text: item.text, importance: item.importance,
                                deadline: item.deadline, isDone: !item.isDone, createdAt: item.createdAt,
                                updatedAt: item.updatedAt, color: item.color)
-        fileCache.add(newItem)
+        addItem(newItem)
+        //reloadView()
+        reloadItems()
         
-        do {
-            try fileCache.save(to: "items.json", format: .json)
-            DDLogInfo("Заметка поменяла статус выполнения на \(newItem.isDone)")
-        } catch {
-            DDLogError("Ошибка сохранения в \(Self.self)")
-        }
     }
 
     func changeImportance() {
@@ -103,10 +157,18 @@ final class TodoListViewModel: ObservableObject {
         } else {
             sortType = .importanceSort
         }
+        reloadItems()
     }
     
     func checkItems() {
         isUpdateCalendar = true
+        reloadItems()
+    }
+    
+    func reloadView() {
+        let tasks = connection.getLocally()
+        let sortedTasks = changeItems(items: tasks)
+        self.tasks = sortedTasks
     }
 
     private func changeItems(items: [TodoItem]) -> [TodoItem] {

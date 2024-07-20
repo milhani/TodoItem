@@ -2,7 +2,7 @@ import Foundation
 
 
 struct DefaultNetworkingService {
-    private let baseURL = "https://hive.mrdekk.ru/todo/"
+    private let baseURL = "https://hive.mrdekk.ru/todo"
     private let authorizationToken = "Haleth"
     
     private let urlSession = URLSession(configuration: .default)
@@ -28,23 +28,21 @@ struct DefaultNetworkingService {
         return request
     }
     
-    private func retryRequestWithItem(_ request: URLRequest, count: Int = 0) async throws -> TodoItem {
-        let delay = min(2.0 * 20.0 * Double(count), 120.0)
+    
+    func retryRequestWithItem(_ request: URLRequest, retryCount: Int = 0) async throws -> TodoItem {
+        let delay = min(Double(2.0 * pow(1.5, Double(retryCount))), 120.0)
         let jitter = Double.random(in: 0.0...0.05)
         let totalDelay = delay * (1.0 + jitter)
-        try await Task.sleep(nanoseconds: UInt64(totalDelay * 1000000))
+        
+        try await Task.sleep(nanoseconds: UInt64(totalDelay * 1_000_000))
+        
         do {
-            var newRequest = request
-            let lastKnownRevision = await storage.getRevision()
-            var headers = request.allHTTPHeaderFields ?? [:]
-            headers["X-Last-Known-Revision"] = "\(lastKnownRevision)"
-            newRequest.allHTTPHeaderFields = headers
-            
-            let (data, _) = try await urlSession.dataTask(for: newRequest)
+            let (data, error) = try await urlSession.dataTask(for: request)
+            print(error)
             return try await parseItem(from: data)
         } catch {
-            if count < 3 {
-                return try await retryRequestWithItem(request, count: count + 1)
+            if retryCount < 3 {
+                return try await retryRequestWithItem(request, retryCount: retryCount + 1)
             }
             throw error
         }
@@ -69,13 +67,8 @@ struct DefaultNetworkingService {
         let totalDelay = delay * (1.0 + jitter)
         try await Task.sleep(nanoseconds: UInt64(totalDelay * 1000000))
         do {
-            var newRequest = request
-            let lastKnownRevision = await storage.getRevision()
-            var headers = request.allHTTPHeaderFields ?? [:]
-            headers["X-Last-Known-Revision"] = "\(lastKnownRevision)"
-            newRequest.allHTTPHeaderFields = headers
-
-            let (data, _) = try await urlSession.data(for: newRequest)
+            let (data, error) = try await urlSession.dataTask(for: request)
+            print(error)
             return try await parseItems(from: data)
         } catch {
             if count < 3 {
@@ -93,7 +86,6 @@ struct DefaultNetworkingService {
         else {
             throw URLError(.cannotDecodeContentData)
         }
-        
         var todoItems: [TodoItem] = []
         for jsonObject in list {
             guard let todoItem = TodoItem.parse(json: jsonObject) else {

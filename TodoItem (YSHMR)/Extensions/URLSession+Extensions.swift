@@ -42,10 +42,10 @@ extension URLSession {
                         continuation.resume(returning: (data, response))
                     }
                 }
+                return 
             }
         } onCancel: {
             Task { await task.cancel() }
         }
     }
 }
-

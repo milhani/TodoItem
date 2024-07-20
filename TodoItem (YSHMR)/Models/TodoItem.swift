@@ -3,9 +3,9 @@ import MyLibrary
 
 
 enum Importance: String, CaseIterable, Identifiable, Comparable {
-    case low
-    case normal
-    case important
+    case low = "low"
+    case normal = "basic"
+    case important = "important"
     
     private static func compare(_ lhs: Self, _ rhs: Self) -> Self {
         switch (lhs, rhs) {
@@ -39,11 +39,12 @@ enum Keys: String {
     case text
     case importance
     case deadline
-    case isDone
-    case createdAt
-    case updatedAt
+    case isDone = "done"
+    case createdAt = "created_at"
+    case updatedAt = "changed_at"
     case color
     case category
+    case lastUpdatedBy = "last_updated_by"
     
     case revision
     case element
@@ -119,6 +120,7 @@ public extension TodoItem {
         
         jsonDict[Keys.id.rawValue] = id
         jsonDict[Keys.text.rawValue] = text
+        jsonDict[Keys.lastUpdatedBy.rawValue] = UIDevice.current.identifierForVendor?.uuidString ?? ""
         
         switch importance {
         case .low, .important:

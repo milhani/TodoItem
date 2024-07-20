@@ -16,8 +16,8 @@ public enum Format {
 
 public final class FileCache<T: FileCachable>  {
     
-    private var todoItems: [String: T]
-    private var isDirty = false
+    public var todoItems: [String: T]
+    var isDirty = false
     private let filename: String
     private let fileFormat: Format
     
@@ -26,19 +26,19 @@ public final class FileCache<T: FileCachable>  {
         self.filename = filename
         self.todoItems = [:]
         self.fileFormat = fileFormat
-        try? load(from: filename, format: fileFormat)
+        _ = load()
     }
 
     
     public func add(_ item: T) {
         todoItems[item.id] = item
-        try? save(to: filename, format: fileFormat)
+        save()
     }
     
     public func remove(_ id: String) {
         guard todoItems[id] != nil else { return }
         todoItems.removeValue(forKey: id)
-        try? save(to: filename, format: fileFormat)
+        save()
     }
     
     public func setDirty(_ isDirty: Bool) {
@@ -49,41 +49,44 @@ public final class FileCache<T: FileCachable>  {
         return self.isDirty
     }
     
-    public func save(to file: String, format: Format) throws {
+    public func save() {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
         else {
-            throw FileCacheErrors.cannotFindDocumentDirectory
+            return
+            //throw FileCacheErrors.cannotFindDocumentDirectory
         }
         
-        let path = documentDirectory.appendingPathComponent(file)
+        let path = documentDirectory.appendingPathComponent(filename)
         
         do {
-            switch format {
+            switch fileFormat {
             case .json:
                 let serializedItems = todoItems.map { _, item in item.json }
                 let data = try JSONSerialization.data(withJSONObject: serializedItems, options: [])
                 try data.write(to: path)
             case .csv:
                 //var data = TodoItem.csvHeadLine
-                var data = todoItems.map { _, item in item.csv }.joined(separator: "\n")
+                let data = todoItems.map { _, item in item.csv }.joined(separator: "\n")
                 try data.write(to: path, atomically: true, encoding: .utf8)
 
             }
         } catch {
-            throw FileCacheErrors.cannotSaveData
+            print("FAILED SAVE")
+            //throw FileCacheErrors.cannotSaveData
         }
     }
     
-    public func load(from file: String, format: Format) throws {
+    public func load() -> [T]? {
         guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
         else {
-            throw FileCacheErrors.cannotFindDocumentDirectory
+            //throw FileCacheErrors.cannotFindDocumentDirectory
+            return nil
         }
         
-        let path = documentDirectory.appendingPathComponent(file)
+        let path = documentDirectory.appendingPathComponent(filename)
 
         do {
-            switch format {
+            switch fileFormat {
             case .json:
                 let data = try Data(contentsOf: path)
                 let json = try JSONSerialization.jsonObject(with: data, options: [])
@@ -93,6 +96,7 @@ public final class FileCache<T: FileCachable>  {
                 self.todoItems = newItems.reduce(into: [String: T]()) { newArray, item in
                     newArray[item.id] = item
                 }
+                return newItems
             case .csv:
                 var data = try String(contentsOf: path).components(separatedBy: "\n")
                 guard !data.isEmpty else { throw FileCacheErrors.incorrectData }
@@ -101,9 +105,12 @@ public final class FileCache<T: FileCachable>  {
                 self.todoItems = newItems.reduce(into: [String: T]()) { newArray, item in
                     newArray[item.id] = item
                 }
+                return newItems
             }
         } catch {
-            throw FileCacheErrors.cannotLoadData
+            //throw FileCacheErrors.cannotLoadData
+            save()
         }
+        return []
     }
 }
