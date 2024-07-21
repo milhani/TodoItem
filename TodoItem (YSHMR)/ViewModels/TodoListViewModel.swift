@@ -8,7 +8,6 @@ enum SortType: String {
     case importanceSort = "Сортировка по важности"
 }
 
-
 final class TodoListViewModel: ObservableObject {
 
     @Published var todoViewPresented: Bool = false {
@@ -27,7 +26,7 @@ final class TodoListViewModel: ObservableObject {
     @Published var sortType: SortType = .importanceSort
     @Published var isUpdateCalendar = false
     
-    var tasks: [TodoItem] = []
+    @Published var tasks: [TodoItem] = []
     
     init(connection: ServerViewConnection) {
         self.connection = connection
@@ -59,10 +58,6 @@ final class TodoListViewModel: ObservableObject {
         let sortedTasks = changeItems(items: tasks)
         self.tasks = sortedTasks
         
-        guard !connection.fileCache.getIsDirty() else {
-            return reloadDirtyList()
-        }
-        
         Task.detached(operation: { [weak self] in
             do {
                 if let tasks = try await self?.connection.get() {
@@ -82,7 +77,6 @@ final class TodoListViewModel: ObservableObject {
 
     func addItem(_ item: TodoItem) {
         _ = connection.saveLocally(item: item)
-        reloadItems()
         
         guard !connection.fileCache.getIsDirty() else {
             return reloadDirtyList()
@@ -96,6 +90,28 @@ final class TodoListViewModel: ObservableObject {
             } catch {
                 self?.connection.fileCache.setDirty(true)
                 DDLogError("Ошибка сохранения в \(Self.self)")
+            }
+        })
+        
+        reloadItems()
+    }
+    
+    func updateItem(_ item: TodoItem) {
+        _ = connection.saveLocally(item: item)
+        reloadItems()
+        
+        guard !connection.fileCache.getIsDirty() else {
+            return reloadDirtyList()
+        }
+        
+        Task.detached(operation: { [weak self] in
+            do {
+                try await self?.connection.updateItem(item: item)
+                self?.isUpdateCalendar = true
+                DDLogInfo("Заметка \(item) изменена в \(Self.self)")
+            } catch {
+                self?.connection.fileCache.setDirty(true)
+                DDLogError("Ошибка изменения в \(Self.self)")
             }
         })
     }
@@ -145,7 +161,7 @@ final class TodoListViewModel: ObservableObject {
         let newItem = TodoItem(id: item.id, text: item.text, importance: item.importance,
                                deadline: item.deadline, isDone: !item.isDone, createdAt: item.createdAt,
                                updatedAt: item.updatedAt, color: item.color)
-        addItem(newItem)
+        updateItem(newItem)
         //reloadView()
         reloadItems()
         

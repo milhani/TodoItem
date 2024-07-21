@@ -21,10 +21,12 @@ struct DefaultNetworkingService {
         
         if withRevision {
             let lastKnownRevision = await storage.getRevision()
-            var headers = request.allHTTPHeaderFields ?? [:]
-            headers["X-Last-Known-Revision"] = "\(lastKnownRevision)"
-            request.allHTTPHeaderFields = headers
+            request.setValue("\(lastKnownRevision)", forHTTPHeaderField: "X-Last-Known-Revision")
+//            var headers = request.allHTTPHeaderFields ?? [:]
+//            headers["X-Last-Known-Revision"] = "\(lastKnownRevision)"
+//            request.allHTTPHeaderFields = headers
         }
+        print(request.allHTTPHeaderFields)
         return request
     }
     
@@ -111,17 +113,17 @@ extension DefaultNetworkingService: NetworkingServiceProtocol {
     }
     
     func getItem(withId id: String, item: TodoItem) async throws -> TodoItem {
-        let request = await makeRequest("list/\(id)", method: "POST", body: try JSONSerialization.data(withJSONObject: ["element": item.json]), withRevision: true)
+        let request = await makeRequest("list/\(id)", method: "POST", body: Data(getBodyElement(item: item).utf8), withRevision: true)
         return try await retryRequestWithItem(request)
     }
     
     func addItem(_ item: TodoItem) async throws -> TodoItem {
-        let request = await makeRequest("list", method: "POST", body: try JSONSerialization.data(withJSONObject: ["element": item.json]), withRevision: true)
+        let request = await makeRequest("list", method: "POST", body: Data(getBodyElement(item: item).utf8), withRevision: true)
         return try await retryRequestWithItem(request)
     }
     
     func updateItem(withId id: String, item: TodoItem) async throws -> TodoItem {
-        let request = await makeRequest("list/\(id)", method: "PUT", body: try JSONSerialization.data(withJSONObject: ["element": item.json]), withRevision: true)
+        let request = await makeRequest("list/\(id)", method: "PUT", body: Data(getBodyElement(item: item).utf8), withRevision: true)
         return try await retryRequestWithItem(request)
     }
     

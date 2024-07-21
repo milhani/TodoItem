@@ -121,23 +121,22 @@ public extension TodoItem {
         jsonDict[Keys.id.rawValue] = id
         jsonDict[Keys.text.rawValue] = text
         jsonDict[Keys.lastUpdatedBy.rawValue] = UIDevice.current.identifierForVendor?.uuidString ?? ""
+        jsonDict["files"] = []
         
-        switch importance {
-        case .low, .important:
-            jsonDict[Keys.importance.rawValue] = importance.rawValue
-        case .normal:
-            break
-        }
+        jsonDict[Keys.importance.rawValue] = importance.rawValue
+       
         
         if let deadline = deadline {
             jsonDict[Keys.deadline.rawValue] = Int(deadline.timeIntervalSince1970)
-        }
+        } 
         
         jsonDict[Keys.isDone.rawValue] = isDone
         jsonDict[Keys.createdAt.rawValue] = Int(createdAt.timeIntervalSince1970)
         
         if let updatedAt = updatedAt {
             jsonDict[Keys.updatedAt.rawValue] = Int(updatedAt.timeIntervalSince1970)
+        } else {
+            jsonDict[Keys.updatedAt.rawValue] = Int(createdAt.timeIntervalSince1970)
         }
         
         jsonDict[Keys.color.rawValue] = color
@@ -145,6 +144,18 @@ public extension TodoItem {
         
         return jsonDict
     }
+}
+
+func getBodyElement(item: TodoItem) -> String{
+    var itemJson = "\(item.json)".dropLast(1).dropFirst()
+    let re = """
+        {
+         "element": {
+            \(itemJson)
+          }
+        }
+        """
+    return re
 }
 
 
