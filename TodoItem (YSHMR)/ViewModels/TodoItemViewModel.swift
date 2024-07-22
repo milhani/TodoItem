@@ -23,17 +23,17 @@ class TodoItemViewModel: ObservableObject {
         }
     }
 
-    var isNew: Bool { fileCache.items[todoItem.id] == nil }
+    var isNew: Bool { connection.fileCache.todoItems[todoItem.id] == nil }
 
     private let todoItem: TodoItem
-    var fileCache: FileCache<TodoItem>
     private var calendarViewController: CalendarViewController?
+    private var connection: ServerViewConnection
     weak var delegate: TodoListViewControllerDelegate?
-
-    init(todoItem: TodoItem, fileCache: FileCache<TodoItem>,
+    
+    init(todoItem: TodoItem, connection: ServerViewConnection,
          calendarViewController: CalendarViewController? = nil) {
         self.todoItem = todoItem
-        self.fileCache = fileCache
+        self.connection = connection
         self.text = todoItem.text
         self.importance = todoItem.importance
         self.deadline = todoItem.deadline
@@ -47,34 +47,36 @@ class TodoItemViewModel: ObservableObject {
             self.delegate = calendarViewController
         }
     }
-
+    
     func saveItem() {
         let newItem = TodoItem(id: todoItem.id, text: text, importance: importance,
                                deadline: deadline, isDone: todoItem.isDone, createdAt: todoItem.createdAt,
                                updatedAt: updatedAt, color: color.hex, category: category)
-        fileCache.add(newItem)
         
-        do {
-            try fileCache.save(to: "items.json", format: .json)
-            delegate?.didUpdateTodoList()
-            DDLogInfo("Новая заметка \(newItem) сохранена в \(Self.self)")
-        } catch {
-            DDLogError("Ошибка сохранения в \(Self.self)")
-        }
+        _ = connection.saveLocally(item: newItem)
+        
+        Task.detached(operation: { [weak self] in
+            do {
+                try await self?.connection.save(item: newItem)
+                self?.delegate?.didUpdateTodoList()
+                print("СОХРАНИЛОСЬ")
+            } catch {
+                self?.connection.fileCache.setDirty(true)
+                print("НЕ СОХРАНИЛОСЬ")
+            }
+        })
     }
-
+    
     func removeItem() {
-        fileCache.remove(todoItem.id)
-        try? fileCache.save(to: "items.json", format: .json)
-        delegate?.didUpdateTodoList()
+        _ = connection.deleteLocally(id: todoItem.id)
         
-        do {
-            try fileCache.save(to: "items.json", format: .json)
-            delegate?.didUpdateTodoList()
-            DDLogInfo("Заметка была удалена, инвормация сохранена в \(Self.self)")
-        } catch {
-            DDLogError("Ошибка сохранения в \(Self.self)")
-        }
+        Task.detached(operation: { [weak self] in
+            do {
+                try await self?.connection.delete(id: self!.todoItem.id)
+                self?.delegate?.didUpdateTodoList()
+            } catch {
+                self?.connection.fileCache.setDirty(true)
+            }
+        })
     }
-
 }

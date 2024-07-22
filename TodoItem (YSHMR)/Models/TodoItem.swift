@@ -3,9 +3,9 @@ import MyLibrary
 
 
 enum Importance: String, CaseIterable, Identifiable, Comparable {
-    case low
-    case normal
-    case important
+    case low = "low"
+    case normal = "basic"
+    case important = "important"
     
     private static func compare(_ lhs: Self, _ rhs: Self) -> Self {
         switch (lhs, rhs) {
@@ -39,17 +39,22 @@ enum Keys: String {
     case text
     case importance
     case deadline
-    case isDone
-    case createdAt
-    case updatedAt
+    case isDone = "done"
+    case createdAt = "created_at"
+    case updatedAt = "changed_at"
     case color
     case category
+    case lastUpdatedBy = "last_updated_by"
+    
+    case revision
+    case element
+    case list
 }
 
 
-struct TodoItem: Identifiable, FileCachable {
+public struct TodoItem: Identifiable, FileCachable {
     
-    let id: String
+    public let id: String
     let text: String
     let importance: Importance
     let deadline: Date?
@@ -82,7 +87,7 @@ struct TodoItem: Identifiable, FileCachable {
 }
 
 
-extension TodoItem {
+public extension TodoItem {
     static func parse(json: Any) -> TodoItem? {
         guard
             let json = json as? [String: Any],
@@ -115,23 +120,23 @@ extension TodoItem {
         
         jsonDict[Keys.id.rawValue] = id
         jsonDict[Keys.text.rawValue] = text
+        jsonDict[Keys.lastUpdatedBy.rawValue] = UIDevice.current.identifierForVendor?.uuidString ?? ""
+        jsonDict["files"] = []
         
-        switch importance {
-        case .low, .important:
-            jsonDict[Keys.importance.rawValue] = importance.rawValue
-        case .normal:
-            break
-        }
+        jsonDict[Keys.importance.rawValue] = importance.rawValue
+       
         
         if let deadline = deadline {
             jsonDict[Keys.deadline.rawValue] = Int(deadline.timeIntervalSince1970)
-        }
+        } 
         
         jsonDict[Keys.isDone.rawValue] = isDone
         jsonDict[Keys.createdAt.rawValue] = Int(createdAt.timeIntervalSince1970)
         
         if let updatedAt = updatedAt {
             jsonDict[Keys.updatedAt.rawValue] = Int(updatedAt.timeIntervalSince1970)
+        } else {
+            jsonDict[Keys.updatedAt.rawValue] = Int(createdAt.timeIntervalSince1970)
         }
         
         jsonDict[Keys.color.rawValue] = color
@@ -141,8 +146,20 @@ extension TodoItem {
     }
 }
 
+func getBodyElement(item: TodoItem) -> String{
+    var itemJson = "\(item.json)".dropLast(1).dropFirst()
+    let re = """
+        {
+         "element": {
+            \(itemJson)
+          }
+        }
+        """
+    return re
+}
 
-extension TodoItem {
+
+public extension TodoItem {
     private static let csvSeparator = ","
     
     var csvHeadLine: String {

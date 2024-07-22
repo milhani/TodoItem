@@ -139,8 +139,8 @@ extension CalendarViewController: UITableViewDelegate {
 extension CalendarViewController {
     @objc func openTodoItemView() {
         let newItem = todoListViewModel.openedItem
-        let fileCache = todoListViewModel.fileCache
-        let viewModel = TodoItemViewModel(todoItem: newItem, fileCache: fileCache, calendarViewController: self)
+        let connection = todoListViewModel.connection
+        let viewModel = TodoItemViewModel(todoItem: newItem, connection: connection, calendarViewController: self)
         let swiftUIHostingController = UIHostingController(rootView: TodoItemView(viewModel: viewModel))
         present(swiftUIHostingController, animated: true)
     }

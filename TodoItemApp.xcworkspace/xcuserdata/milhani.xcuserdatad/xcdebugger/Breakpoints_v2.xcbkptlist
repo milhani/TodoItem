@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "18CCAB8F-42AF-483A-86B7-7D86C0CC55AB"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "525B327F-2348-41E3-BC7C-ACF75A0DD975"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TodoItem (YSHMR)/Services/DefaultNetworkingService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "addItem(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DBB07D47-CF97-483E-A73A-FCFFF2E9AADF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TodoItem (YSHMR)/ViewModels/TodoListViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "reloadItems()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A255ED67-2785-47EA-8FF6-4F45CF943724"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TodoItem (YSHMR)/ViewModels/TodoListViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "reloadItems()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A255ED67-2785-47EA-8FF6-4F45CF943724 - cbb31c2c3026e2f6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async -&gt; () in TodoItem__YSHMR_.TodoListViewModel.reloadItems() -&gt; ()"
+                  moduleName = "TodoItem (YSHMR)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/milhani/Desktop/%D0%AF%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%20%D0%A8%D0%9C%D0%A0%202024/TodoItem%20(YSHMR)/TodoItem%20(YSHMR)/ViewModels/TodoListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65">
+               </Location>
+               <Location
+                  uuid = "A255ED67-2785-47EA-8FF6-4F45CF943724 - 982b9d9b93202688"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async -&gt; () in TodoItem__YSHMR_.TodoListViewModel.reloadItems() -&gt; ()"
+                  moduleName = "TodoItem (YSHMR)"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/milhani/Desktop/%D0%AF%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%20%D0%A8%D0%9C%D0%A0%202024/TodoItem%20(YSHMR)/TodoItem%20(YSHMR)/ViewModels/TodoListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

@@ -27,7 +27,7 @@ actor SessionTask {
 }
 
 extension URLSession {
-    func data(for urlRequest: URLRequest) async throws -> (Data, URLResponse) {
+    func dataTask(for urlRequest: URLRequest) async throws -> (Data, URLResponse) {
         let task = SessionTask()
 
         return try await withTaskCancellationHandler {
@@ -42,10 +42,10 @@ extension URLSession {
                         continuation.resume(returning: (data, response))
                     }
                 }
+                return 
             }
         } onCancel: {
             Task { await task.cancel() }
         }
     }
 }
-
