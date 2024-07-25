@@ -34,7 +34,7 @@ struct TodoListView: View {
                 .padding(.horizontal, 25)
                 List {
                     Section {
-                        ForEach(viewModel.tasks) { todoItem in
+                        ForEach(viewModel.sortedTasks) { todoItem in
                             TodoCellView(
                                 todoItem: todoItem,
                                 action: {
@@ -88,7 +88,7 @@ struct TodoListView: View {
                     
                     TodoItemView (
                         viewModel: TodoItemViewModel(
-                            todoItem: viewModel.openedItem, connection: viewModel.connection
+                            todoItem: viewModel.openedItem, connection: viewModel.connection, todoListViewModel: viewModel
                         )
                     )
                 }

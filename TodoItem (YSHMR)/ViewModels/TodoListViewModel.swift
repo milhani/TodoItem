@@ -27,9 +27,11 @@ final class TodoListViewModel: ObservableObject {
     @Published var isUpdateCalendar = false
     
     @Published var tasks: [TodoItem] = []
+    @Published var sortedTasks: [TodoItem] = []
     
     init(connection: ServerViewConnection) {
         self.connection = connection
+        print("INITED")
         reloadItems()
     }
     
@@ -53,29 +55,13 @@ final class TodoListViewModel: ObservableObject {
         connection.fileCache.todoItems.values.filter({ $0.isDone }).count
     }
     
-    private func reloadItems() {
-        let tasks = connection.getLocally()
-        let sortedTasks = changeItems(items: tasks)
-        self.tasks = sortedTasks
-        
-        Task.detached(operation: { [weak self] in
-            do {
-                if let tasks = try await self?.connection.get() {
-                    let sortedTasks = self!.changeItems(items: tasks)
-                    self?.tasks = sortedTasks
-                    var lst: [String: TodoItem] = [:]
-                    for el in tasks {
-                        lst[el.id] = el
-                    }
-                    self?.connection.fileCache.todoItems = lst
-                }
-            } catch {
-                self?.connection.fileCache.setDirty(true)
-            }
-        })
+    func reloadItems() {
+        print("RELOAD")
+        loadTasksFromServer()
     }
 
     func addItem(_ item: TodoItem) {
+        tasks.append(item)
         _ = connection.saveLocally(item: item)
         
         guard !connection.fileCache.getIsDirty() else {
@@ -92,13 +78,16 @@ final class TodoListViewModel: ObservableObject {
                 DDLogError("Ошибка сохранения в \(Self.self)")
             }
         })
-        
-        reloadItems()
+        self.sortedTasks = changeItems(items: tasks)
     }
     
     func updateItem(_ item: TodoItem) {
+        let oldItemIndex = tasks.firstIndex(where: {$0.id == item.id})
+        if oldItemIndex == nil {
+            return
+        }
+        tasks[oldItemIndex!] = item
         _ = connection.saveLocally(item: item)
-        reloadItems()
         
         guard !connection.fileCache.getIsDirty() else {
             return reloadDirtyList()
@@ -114,11 +103,16 @@ final class TodoListViewModel: ObservableObject {
                 DDLogError("Ошибка изменения в \(Self.self)")
             }
         })
+       self.sortedTasks = changeItems(items: tasks)
     }
 
     func delete(_ item: TodoItem) {
+        let itemIndex = tasks.firstIndex(where: {$0.id == item.id})
+        if itemIndex == nil {
+            return
+        }
+        tasks.remove(at: itemIndex!)
         _ = connection.deleteLocally(id: item.id)
-        reloadItems()
         
         guard !connection.fileCache.getIsDirty() else {
             return reloadDirtyList()
@@ -133,6 +127,8 @@ final class TodoListViewModel: ObservableObject {
                 DDLogError("Ошибка сохранения в \(Self.self)")
             }
         })
+        self.sortedTasks = changeItems(items: tasks)
+        //reloadItems()
     }
     
     func reloadDirtyList() {
@@ -155,6 +151,7 @@ final class TodoListViewModel: ObservableObject {
 
     func toggleShowCompleted() {
         chosenSorting.toggle()
+        sortedTasks = changeItems(items: self.tasks)
     }
     
     func toggleDone(_ item: TodoItem) {
@@ -163,8 +160,7 @@ final class TodoListViewModel: ObservableObject {
                                updatedAt: item.updatedAt, color: item.color)
         updateItem(newItem)
         //reloadView()
-        reloadItems()
-        
+        //reloadItems()
     }
 
     func changeImportance() {
@@ -173,18 +169,17 @@ final class TodoListViewModel: ObservableObject {
         } else {
             sortType = .importanceSort
         }
-        reloadItems()
+        sortedTasks = changeItems(items: self.tasks)
+        //reloadItems()
     }
     
     func checkItems() {
         isUpdateCalendar = true
-        reloadItems()
+        //reloadItems()
     }
     
     func reloadView() {
-        let tasks = connection.getLocally()
-        let sortedTasks = changeItems(items: tasks)
-        self.tasks = sortedTasks
+        loadTasksLocally()
     }
 
     private func changeItems(items: [TodoItem]) -> [TodoItem] {
@@ -199,6 +194,33 @@ final class TodoListViewModel: ObservableObject {
         }
         DDLogInfo("Изменение ключа сортировки")
         return result
+    }
+
+    
+    func loadTasksFromServer() {
+        Task.detached(operation: { [weak self] in
+            do {
+                if let tasks = try await self?.connection.get() {
+                    //let sortedTasks = self!.changeItems(items: tasks)
+                    self?.tasks = tasks
+//                    var lst: [String: TodoItem] = [:]
+//                    for el in tasks {
+//                        lst[el.id] = el
+//                    }
+//                    self?.connection.fileCache.todoItems = lst
+                    self?.sortedTasks = self?.changeItems(items: tasks) ?? tasks
+                }
+            } catch {
+                self?.loadTasksLocally()
+                self?.connection.fileCache.setDirty(true)
+            }
+        })
+    }
+    
+    func loadTasksLocally() {
+        let tasks = connection.getLocally()
+        self.tasks = tasks
+        self.sortedTasks = changeItems(items: tasks)
     }
 
 }

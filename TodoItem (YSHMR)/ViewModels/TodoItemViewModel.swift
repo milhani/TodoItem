@@ -27,11 +27,12 @@ class TodoItemViewModel: ObservableObject {
 
     private let todoItem: TodoItem
     private var calendarViewController: CalendarViewController?
+    private var todoListViewModel: TodoListViewModel?
     private var connection: ServerViewConnection
     weak var delegate: TodoListViewControllerDelegate?
     
     init(todoItem: TodoItem, connection: ServerViewConnection,
-         calendarViewController: CalendarViewController? = nil) {
+         calendarViewController: CalendarViewController? = nil, todoListViewModel: TodoListViewModel? = nil) {
         self.todoItem = todoItem
         self.connection = connection
         self.text = todoItem.text
@@ -46,6 +47,7 @@ class TodoItemViewModel: ObservableObject {
             self.calendarViewController = calendarViewController
             self.delegate = calendarViewController
         }
+        self.todoListViewModel = todoListViewModel
     }
     
     func saveItem() {
@@ -53,18 +55,36 @@ class TodoItemViewModel: ObservableObject {
                                deadline: deadline, isDone: todoItem.isDone, createdAt: todoItem.createdAt,
                                updatedAt: updatedAt, color: color.hex, category: category)
         
-        _ = connection.saveLocally(item: newItem)
+        //_ = connection.saveLocally(item: newItem)
         
-        Task.detached(operation: { [weak self] in
-            do {
-                try await self?.connection.save(item: newItem)
-                self?.delegate?.didUpdateTodoList()
-                print("СОХРАНИЛОСЬ")
-            } catch {
-                self?.connection.fileCache.setDirty(true)
-                print("НЕ СОХРАНИЛОСЬ")
-            }
-        })
+        if self.isNew == true {
+            self.todoListViewModel?.addItem(newItem)
+        } else {
+            self.todoListViewModel?.updateItem(newItem)
+        }
+        
+//        Task.detached(operation: { [weak self] in
+//            do {
+//                if self?.isNew == true {
+//                    try await self?.connection.save(item: newItem)
+//                } else {
+//                    try await self?.connection.updateItem(item: newItem)
+//                }
+//                self?.delegate?.didUpdateTodoList()
+//                print("СОХРАНИЛОСЬ")
+////                print(self?.todoListViewModel == nil)
+////                if let todo = self?.todoListViewModel {
+////                    todo.reloadItems()
+////                    print("SAVERELOAD")
+////                }
+//                //self?.todoListViewModel?.reloadItems()
+//                //self?.todoListViewModel?.tasks = await (try self?.connection.get())!
+//                self?.todoListViewModel?.reloadItems()
+//            } catch {
+//                self?.connection.fileCache.setDirty(true)
+//                print("НЕ СОХРАНИЛОСЬ")
+//            }
+//        })
     }
     
     func removeItem() {

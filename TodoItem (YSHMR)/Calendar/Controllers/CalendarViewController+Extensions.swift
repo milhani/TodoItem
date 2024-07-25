@@ -140,7 +140,7 @@ extension CalendarViewController {
     @objc func openTodoItemView() {
         let newItem = todoListViewModel.openedItem
         let connection = todoListViewModel.connection
-        let viewModel = TodoItemViewModel(todoItem: newItem, connection: connection, calendarViewController: self)
+        let viewModel = TodoItemViewModel(todoItem: newItem, connection: connection, calendarViewController: self, todoListViewModel: todoListViewModel)
         let swiftUIHostingController = UIHostingController(rootView: TodoItemView(viewModel: viewModel))
         present(swiftUIHostingController, animated: true)
     }
@@ -151,6 +151,6 @@ extension CalendarViewController: TodoListViewControllerDelegate {
         sectionsUpdate()
         contentView.tableView.reloadData()
         contentView.collectionView.reloadData()
-        todoListViewModel.checkItems()
+        todoListViewModel.reloadItems()
     }
 }
